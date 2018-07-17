@@ -1,0 +1,20 @@
+
+Subject_PK rois middle hippocampal body 
+
+
+fslmaths lHC_-26_-18_-24 -kernel sphere 3 -fmean -bin lHC_-26_-18_-24_3gauss -odt float
+fslmaths lHC_-26_-16_-26 -kernel sphere 3 -fmean -bin lHC_-26_-16_-26_3gauss -odt float
+fslmaths lHC_-26_-14_-26 -kernel sphere 3 -fmean -bin lHC_-26_-14_-26_3gauss -odt float
+fslmaths lHC_-26_-18_-26 -kernel sphere 3 -fmean -bin lHC_-26_-18_-26_3gauss -odt float
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject_PK/t1/wt1.nii -mul 0 -add 1 -roi 58 1 54 1 24 1 0 1 lHC_-26_-18_-24 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject_PK/t1/wt1.nii -mul 0 -add 1 -roi 58 1 55 1 23 1 0 1 lHC_-26_-16_-26 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject_PK/t1/wt1.nii -mul 0 -add 1 -roi 58 1 56 1 23 1 0 1 lHC_-26_-14_-26 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject_PK/t1/wt1.nii -mul 0 -add 1 -roi 58 1 54 1 23 1 0 1 lHC_-26_-18_-26 -odt float
+
+fslmaths lHC_-26_-18_-24 -kernel sphere 3 -fmean -bin lHC_-26_-18_-24 -odt float
+fslmaths lHC_-26_-16_-26 -kernel sphere 3 -fmean -bin lHC_-26_-16_-26 -odt float
+fslmaths lHC_-26_-14_-26 -kernel sphere 3 -fmean -bin lHC_-26_-14_-26 -odt float
+fslmaths lHC_-26_-18_-26 -kernel sphere 3 -fmean -bin lHC_-26_-18_-26 -odt float 
+
+gunzip lHC_-26_-18_-24.nii.gz lHC_-26_-16_-26.nii.gz lHC_-26_-14_-26.nii.gz lHC_-26_-18_-26.nii.gz 

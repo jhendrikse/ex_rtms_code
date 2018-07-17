@@ -1,0 +1,100 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf460
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 AndaleMono;}
+{\colortbl;\red255\green255\blue255;\red0\green215\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww14200\viewh15700\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 cd 
+\f1 \cf2 \cb0 \CocoaLigature0 /Users/joshua_hendrikse/Documents/My_Documents/PhD/Ex_rTMS_study/Data/Active/S5_RD/MRI/mrs
+\f0 \cf0 \cb1 \CocoaLigature1 \
+\
+\
+#Covert the t1 images using dcm2nii and use the image 
+\b as converted (without the cropping etc).
+\b0 \
+#type dcm2nii into terminal, drag the first dicom. rename the file.\
+#Move .nii.gz files to parent directory and rename to: \
+t1_pre.nii.gz\
+t1_post.nii.gz\
+#also put the cropped and oriented \'93co\'94 images in here\
+t1_pre_co.nii.gz\
+t1_post_co.nii.gz\
+\
+\
+#Orient the t1 images and run fsl_anat:\
+fslreorient2std t1_pre_co.nii.gz t1_pre_orient\
+fslreorient2std t1_post_co.nii.gz t1_post_orient\
+\
+#fsl_anat -i t1_pre_orient.nii.gz\
+#fsl_anat -i t1_post_orient.nii.gz\
+\
+\
+\
+\
+#Brain extract the biascorr t1 image, view, and get the csf image:\
+\
+cp t1_pre_orient.nii.gz t1_pre_biascorr.nii.gz\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1 \cf2 \cb0 \CocoaLigature0 bet t1_pre_biascorr.nii.gz t1_pre_biascorr_brain -m -c 83 105 99 -f 0.35
+\f0 \cf0 \cb1 \CocoaLigature1 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 fslview t1_pre_biascorr.nii.gz t1_pre_biascorr_brain.nii.gz -l "Green" &\
+\
+\
+#MRS VOXEL:\
+\
+voxel_mask_from_rda.sh t1_pre_orient.nii.gz daris/pre/*pre?HK?1?1.rda pre_hk_1\
+voxel_mask_from_rda.sh t1_pre_orient.nii.gz daris/pre/*pre?HK?2?1.rda pre_hk_2\
+voxel_mask_from_rda.sh t1_pre_orient.nii.gz daris/pre/*pre?dlpfc?1?1.rda pre_dlpfc_1\
+voxel_mask_from_rda.sh t1_post_orient.nii.gz daris/post/*post?HK?1?1.rda post_hk_1\
+voxel_mask_from_rda.sh t1_post_orient.nii.gz daris/post/*post?HK?2?1.rda post_hk_2\
+voxel_mask_from_rda.sh t1_post_orient.nii.gz daris/post/*post?HK?3?1.rda post_hk_3\
+voxel_mask_from_rda.sh t1_post_orient.nii.gz daris/post/*post?dlpfc?1?1.rda post_dlpfc_1\
+\
+flirt -dof 6 -in t1_pre_orient -ref t1_pre_biascorr -omat t1_pre_orient_to_biascorr.mat -out t1_pre_orient_coreg_biascorr\
+flirt -dof 6 -in t1_post_orient -ref t1_pre_biascorr -omat t1_post_orient_to_biascorr.mat -out t1_post_orient_coreg_biascorr\
+\
+flirt -in pre_hk_1 -ref t1_pre_biascorr -applyxfm -init t1_pre_orient_to_biascorr.mat -out pre_hk_1_reg_biascorr\
+flirt -in pre_hk_2 -ref t1_pre_biascorr -applyxfm -init t1_pre_orient_to_biascorr.mat -out pre_hk_2_reg_biascorr\
+flirt -in pre_dlpfc_1 -ref t1_pre_biascorr -applyxfm -init t1_pre_orient_to_biascorr.mat -out pre_dlpfc_1_reg_biascorr\
+flirt -in post_hk_1 -ref t1_pre_biascorr -applyxfm -init t1_post_orient_to_biascorr.mat -out post_hk_1_reg_biascorr\
+flirt -in post_hk_2 -ref t1_pre_biascorr -applyxfm -init t1_post_orient_to_biascorr.mat -out post_hk_2_reg_biascorr\
+flirt -in post_hk_3 -ref t1_pre_biascorr -applyxfm -init t1_post_orient_to_biascorr.mat -out post_hk_3_reg_biascorr\
+flirt -in post_dlpfc_1 -ref t1_pre_biascorr -applyxfm -init t1_post_orient_to_biascorr.mat -out post_dlpfc_1_reg_biascorr\
+\
+fslview t1_pre_biascorr pre_hk_1_reg_biascorr -l "Yellow" post_hk_1_reg_biascorr -l "Green" -t 0.5 &\
+fslview t1_pre_biascorr pre_dlpfc_1_reg_biascorr -l "Yellow" post_dlpfc_1_reg_biascorr -l "Green" -t 0.5 &\
+\
+\
+echo hand\
+echo pre\
+get_voxel_contents.sh t1_pre_biascorr_brain pre_hk_1_reg_biascorr pre_hk_1_reg_biascorr_seg\
+echo post\
+get_voxel_contents.sh t1_pre_biascorr_brain post_hk_1_reg_biascorr post_hk_1_reg_biascorr_seg\
+echo dlpfc\
+echo pre\
+get_voxel_contents.sh t1_pre_biascorr_brain pre_dlpfc_1_reg_biascorr pre_dlpfc_1_reg_biascorr_seg\
+echo post\
+get_voxel_contents.sh t1_pre_biascorr_brain post_dlpfc_1_reg_biascorr post_dlpfc_1_reg_biascorr_seg\
+\
+\
+\
+applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz --in=pre_hk_1_reg_biascorr --out=pre_hk_1_reg_mni --warp=t1_pre_orient.anat/T1_to_MNI_nonlin_field.nii.gz\
+applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz --in=post_hk_1_reg_biascorr --out=post_hk_1_reg_mni --warp=t1_pre_orient.anat/T1_to_MNI_nonlin_field.nii.gz\
+applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz --in=pre_dlpfc_1_reg_biascorr --out=pre_dlpfc_1_reg_mni --warp=t1_pre_orient.anat/T1_to_MNI_nonlin_field.nii.gz\
+applywarp --ref=$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz --in=post_dlpfc_1_reg_biascorr --out=post_dlpfc_1_reg_mni --warp=t1_pre_orient.anat/T1_to_MNI_nonlin_field.nii.gz\
+fslmaths pre_hk_1_reg_mni -thr 0.5 -bin pre_hk_1_reg_mni_thr\
+fslmaths post_hk_1_reg_mni -thr 0.5 -bin post_hk_1_reg_mni_thr\
+fslmaths pre_dlpfc_1_reg_mni -thr 0.5 -bin pre_dlpfc_1_reg_mni_thr\
+fslmaths post_dlpfc_1_reg_mni -thr 0.5 -bin post_dlpfc_1_reg_mni_thr\
+\
+fslview D03_JH1408/pre_hk_1_reg_mni_thr.nii.gz D03_JH1408/post_hk_1_reg_mni_thr.nii.gz D04_CA1408/pre_hk_1_reg_mni_thr.nii.gz D04_CA1408/post_hk_1_reg_mni_thr.nii.gz D05_DT2108/pre_hk_1_reg_mni_thr.nii.gz D05_DT2108/post_hk_1_reg_mni_thr.nii.gz D07_RM2108/pre_hk_1_reg_mni_thr.nii.gz &\
+\
+fslmaths D03_JH1408/pre_hk_1_reg_mni_thr.nii.gz -add D03_JH1408/post_hk_1_reg_mni_thr.nii.gz -add D04_CA1408/pre_hk_1_reg_mni_thr.nii.gz -add D04_CA1408/post_hk_1_reg_mni_thr.nii.gz -add D05_DT2108/pre_hk_1_reg_mni_thr.nii.gz -add D05_DT2108/post_hk_1_reg_mni_thr.nii.gz -add D07_RM2108/pre_hk_1_reg_mni_thr.nii.gz all_hk_mni\
+\
+fslmaths D03_JH1408/pre_dlpfc_1_reg_mni_thr.nii.gz -add D03_JH1408/post_dlpfc_1_reg_mni_thr.nii.gz -add D04_CA1408/pre_dlpfc_1_reg_mni_thr.nii.gz -add D04_CA1408/post_dlpfc_1_reg_mni_thr.nii.gz -add D05_DT2108/pre_dlpfc_1_reg_mni_thr.nii.gz -add D05_DT2108/post_dlpfc_1_reg_mni_thr.nii.gz -add D07_RM2108/pre_dlpfc_1_reg_mni_thr.nii.gz all_dlpfc_mni\
+\
+\
+\
+}

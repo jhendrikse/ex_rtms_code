@@ -1,0 +1,29 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf200
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Troubleshooting voxel_mask rda CD_32\
+\
+* Script failing to generate voxel masks from rda. Empty voxel_time_reg_biascorr files. Script then fails to segment to get proportions of grey, white, csf. \
+\
+Troubleshooting steps: \
+*checked .dcm to .nifti conversion\
+* checked and reset permissions for rda files.\
+* *** next to try - recopy rda files from carbon_backup and rename again.  \
+* opened rda files with Tarquin to see if they contained relevant information - spectra loaded and looked fine. \
+* reran entire script - inc. fsl_anat. \
+* checked accuracy of bet brain extraction \
+* made sure voxel_mask_from_rda.sh was on bash path.\
+* checked permissions of voxel_mask_from_rda.sh script. Looked over code for mentions of fslview - changed to fslview_deprecated which may have been causing script to error (fslview has now been superseded by fsleyes)\
+\
+*Isolated that input structural image t1_*timepoint*_orient_nii_gz opens correctly, looks fine, but does not output mask image when combined with rda1. \
+\
+* 3/4/18\
+t1_*timepoint*_orient.nii.gz does not open correctly in fsleyes. This is the input structural image into voxel_mask_from_rda.sh script. \
+\
+Error is as far back as fslreorient2std - the input images t1_*timepoint*.nii.gz and resulting t1_pre_orient.nii.gz cannot be opened by fsleyes (but curiously fslanat still runs). \
+\
+}

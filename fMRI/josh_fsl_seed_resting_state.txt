@@ -1,0 +1,116 @@
+##To look at the epi header, so you can confirm things like TR, number of epi's in the resting state scan, voxel dimensions...
+##use the command 'fslinfo' as follows:
+
+[joshua_hendrikse@m2004 epi]$ fslinfo epi.nii 
+data_type      INT16
+dim1           64
+dim2           64
+dim3           44	##This is the number of slices (epi is a 2D acquisition, get a 3D image every TR by acquiring X slices within 1 TR)
+dim4           189	##This is the number of images. TR X number of images = total scan time in seconds)
+datatype       4	##Check this to make sure dicom to nifti conversion generated x1 4D image
+pixdim1        3.000000	##This is the inplane voxel dimension. 3mm x 64 matrix = the FOV in X dimension
+pixdim2        3.000000	##This is the inplane voxel dimension. 3mm x 64 matrix = the FOV in Y dimension
+pixdim3        3.000000
+pixdim4        1.000000	##This is the TR
+cal_max        0.0000
+cal_min        0.0000
+file_type      NIFTI-1+
+
+#These two lines of code use a for loop to make subject directories for 14 participants. Exercisers group...
+
+cd $data
+for i in {1..14}; do mkdir ex${i}; done
+
+##############
+
+
+cd /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/rois
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 31 1 63 1 37 1 0 1 rdcp_28_1_3 -odt float
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 63 1 37 1 0 1 ldcp_-28_1_3 -odt float
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 32 1 67 1 39 1 0 1 rdrp_25_8_6 -odt float
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 57 1 67 1 39 1 0 1 ldrp_-25_8_6 -odt float
+
+fslmaths rdcp_28_1_3 -kernel sphere 3 -fmean -bin rdcp_28_1_3_3gauss -odt float
+
+fslmaths ldcp_-28_1_3 -kernel sphere 3 -fmean -bin ldcp_-28_1_3_3gauss -odt float
+
+fslmaths rdrp_25_8_6 -kernel sphere 3 -fmean -bin rdrp_25_8_6_3gauss -odt float
+
+fslmaths ldrp_-25_8_6 -kernel sphere 3 -fmean -bin ldrp_-25_8_6_3gauss -odt float
+
+
+########## 1st Pass at making ROIs ##############
+
+cd /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/rois
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 57 1 54 1 27 1 0 1 lHC_-24_-18_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 58 1 54 1 27 1 0 1 lHC_-26_-18_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 54 1 27 1 0 1 lHC_-28_-18_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 60 1 54 1 27 1 0 1 lHC_-30_-18_-18 -odt float
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 57 1 55 1 27 1 0 1 lHC_-24_-16_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 58 1 55 1 27 1 0 1 lHC_-26_-16_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 55 1 27 1 0 1 lHC_-28_-16_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 60 1 55 1 27 1 0 1 lHC_-30_-16_-18 -odt float
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 57 1 54 1 26 1 0 1 lHC_-24_-18_-20 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 58 1 54 1 26 1 0 1 lHC_-26_-18_-20 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 54 1 26 1 0 1 lHC_-28_-18_-20 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 60 1 54 1 26 1 0 1 lHC_-30_-18_-20 -odt float
+
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 57 1 55 1 26 1 0 1 lHC_-24_-16_-20 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 58 1 55 1 26 1 0 1 lHC_-26_-16_-20 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 55 1 26 1 0 1 lHC_-28_-16_-20 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 60 1 55 1 26 1 0 1 lHC_-30_-16_-20 -odt float
+
+1st Run
+fslmaths lHC_-24_-18_-18 -kernel sphere 3 -fmean -bin lHC_-24_-18_-18_3gauss -odt float
+fslmaths lHC_-26_-18_-18 -kernel sphere 3 -fmean -bin lHC_-26_-18_-18_3gauss -odt float
+fslmaths lHC_-28_-18_-18 -kernel sphere 3 -fmean -bin lHC_-28_-18_-18_3gauss -odt float
+fslmaths lHC_-30_-18_-18 -kernel sphere 3 -fmean -bin lHC_-30_-18_-18_3gauss -odt float
+
+fslmaths lHC_-24_-16_-18 -kernel sphere 3 -fmean -bin lHC_-24_-16_-18_3gauss -odt float
+fslmaths lHC_-26_-16_-18 -kernel sphere 3 -fmean -bin lHC_-26_-16_-18_3gauss -odt float
+fslmaths lHC_-28_-16_-18 -kernel sphere 3 -fmean -bin lHC_-28_-16_-18_3gauss -odt float
+fslmaths lHC_-30_-16_-18 -kernel sphere 3 -fmean -bin lHC_-30_-16_-18_3gauss -odt float
+
+fslmaths lHC_-24_-18_-20 -kernel sphere 3 -fmean -bin lHC_-24_-18_-20_3gauss -odt float
+fslmaths lHC_-26_-18_-20 -kernel sphere 3 -fmean -bin lHC_-26_-18_-20_3gauss -odt float
+fslmaths lHC_-28_-18_-20 -kernel sphere 3 -fmean -bin lHC_-28_-18_-20_3gauss -odt float
+fslmaths lHC_-30_-18_-20 -kernel sphere 3 -fmean -bin lHC_-30_-18_-20_3gauss -odt float
+
+fslmaths lHC_-24_-16_-20 -kernel sphere 3 -fmean -bin lHC_-24_-16_-20_3gauss -odt float
+fslmaths lHC_-26_-16_-20 -kernel sphere 3 -fmean -bin lHC_-26_-16_-20_3gauss -odt float
+fslmaths lHC_-28_-16_-20 -kernel sphere 3 -fmean -bin lHC_-28_-16_-20_3gauss -odt float
+fslmaths lHC_-30_-16_-20 -kernel sphere 3 -fmean -bin lHC_-30_-16_-20_3gauss -odt float
+
+2nd Run
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 57 1 54 1 27 1 0 1 lHC_-24_-18_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 57 1 56 1 27 1 0 1 lHC_-24_-14_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 52 1 27 1 0 1 lHC_-28_-22_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 50 1 29 1 0 1 lHC_-28_-26_-14 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 61 1 50 1 29 1 0 1 lHC_-32_-26_-14 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 54 1 27 1 0 1 lHC_-28_-18_-18 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 56 1 25 1 0 1 lHC_-28_-14_-22 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 61 1 56 1 25 1 0 1 lHC_-32_-14_-22 -odt float
+fslmaths /gpfs/M2Home/joshua_hendrikse/Monash076/Josh/fMRI/subject/t1/wt1.nii -mul 0 -add 1 -roi 59 1 58 1 23 1 0 1 lHC_-28_-10_-26 -odt float
+
+fslmaths lHC_-24_-18_-18 -kernel sphere 3 -fmean -bin lHC_-24_-18_-18 -odt float
+fslmaths lHC_-24_-14_-18 -kernel sphere 3 -fmean -bin lHC_-24_-14_-18 -odt float
+fslmaths lHC_-28_-22_-18 -kernel sphere 3 -fmean -bin lHC_-28_-22_-18 -odt float
+fslmaths lHC_-28_-26_-14 -kernel sphere 3 -fmean -bin lHC_-28_-26_-14 -odt float
+fslmaths lHC_-32_-26_-14 -kernel sphere 3 -fmean -bin lHC_-32_-26_-14 -odt float
+fslmaths lHC_-28_-18_-18 -kernel sphere 3 -fmean -bin lHC_-28_-18_-18 -odt float
+fslmaths lHC_-28_-14_-22 -kernel sphere 3 -fmean -bin lHC_-28_-14_-22 -odt float
+fslmaths lHC_-32_-14_-22 -kernel sphere 3 -fmean -bin lHC_-32_-14_-22 -odt float
+fslmaths lHC_-28_-10_-26 -kernel sphere 3 -fmean -bin lHC_-28_-10_-26 -odt float 
+
+fslview ../subject_JC/t1/wt1.nii lHC_-24_-18_-18.nii.gz lHC_-24_-14_-18.nii.gz lHC_-28_-22_-18.nii.gz lHC_-28_-26_-14.nii.gz lHC_-32_-26_-14.nii.gz lHC_-28_-18_-18.nii.gz lHC_-28_-14_-22.nii.gz lHC_-32_-14_-22.nii.gz lHC_-28_-10_-26.nii.gz &
+
+gunzip lHC_-24_-18_-18.nii.gz lHC_-24_-14_-18.nii.gz lHC_-28_-22_-18.nii.gz lHC_-28_-26_-14.nii.gz lHC_-32_-26_-14.nii.gz lHC_-28_-18_-18.nii.gz lHC_-28_-14_-22.nii.gz lHC_-32_-14_-22.nii.gz lHC_-28_-10_-26.nii.gz &
+
+
