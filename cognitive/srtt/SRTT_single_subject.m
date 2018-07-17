@@ -1,4 +1,4 @@
-%% This script can be used to interrogate the degree of motor learning across the serial reaction time task for a single run of the task (as included in the ex_rtms cognitive battery).  
+%% This script can be used to assess the degree of motor learning across the serial reaction time task for a single run of the task (as included in the ex_rtms cognitive battery).  
 
 clc, clear all, close all; 
 % 
