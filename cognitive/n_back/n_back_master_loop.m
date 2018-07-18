@@ -1,4 +1,6 @@
 clear; close all; clc;
+% This script runs a for loop to output the main outcome measures for the
+% n-back task across the ex rTMS participant sample 
 
 ActiveID = {'S2_MS';'S3_DJ';'S4_JM';'S5_RD';'S6_KV';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S16_YS';'S17_JTR';'S19_JA';'S20_WO';'S22_NS';'S25_SC';'S27_ANW';'S33_DJG';'S34_ST';'S35_TG';'S36_AY'};
 
