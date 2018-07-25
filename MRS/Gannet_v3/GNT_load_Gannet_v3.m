@@ -1,7 +1,9 @@
 [a b] = uigetfile ('*.dat', 'MultiSelect','On');
 
-% General format to call GannetLoad
-%MRS_struct = GannetLoad({'meas_MID00078_FID43774_1_MEGA_GABA_HK.dat'},{'meas_MID00079_FID43775_1_MEGA_GABA_HK_Water.dat'});
+% General format to call GannetLoad & GannetFit w/ Water TWIX
+
+%MRS_struct = GannetLoad({'TWIX.dat'},{'TWIX_Water.dat'});
+%MRS_struct = GannetFit(MRS_struct)
 
 %Chao Suo 2015
 
