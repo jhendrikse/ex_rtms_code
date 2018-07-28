@@ -57,27 +57,19 @@ for bigK=1:length(FILE)
   
   all_all = [HP_pre, HP_post, PTL_pre, PTL_post, SMA_pre, SMA_post]; %Creates matrix which includes path to all three voxel files at both timepoints
   
-  for x = 1:length(all_all) % determine if water twix are present, returns missing data as 99999 if not found. 
+  for x = 1:length(all_all) % determine if water twix are present, returns missing data as 99999 if not found.
   load ([all_all{x}, '/MRS_struct.mat']);
   
-  if isfield(MRS_struct.out.vox1,'water')
-      MRS_struct.out.vox1.NAA.ConcIU = MRS_struct.out.vox1.NAA.ConcIU;
-      MRS_struct.out.vox1.NAA.ConcCr = MRS_struct.out.vox1.NAA.ConcCr;
-      MRS_struct.out.vox1.Cho.ConIU = MRS_struct.out.vox1.Cho.ConcIU;
-      MRS_struct.out.vox1.Cho.ConcCr = MRS_struct.out.vox1.Cho.ConcCr;
-  else
-      MRS_struct.out.vox1.NAA.ConcIU = 99999;
-      MRS_struct.out.vox1.NAA.ConcCr = MRS_struct.out.vox1.NAA.ConcCr;
-      MRS_struct.out.vox1.Cho.ConIU = 99999;
-      MRS_struct.out.vox1.Cho.ConcCr = MRS_struct.out.vox1.Cho.ConcCr;
-  end
+  MRS_struct.out.vox1.NAA.Area = MRS_struct.out.vox1.NAA.Area;
+  MRS_struct.out.vox1.Cho.Area = MRS_struct.out.vox1.Cho.Area;
   
-  GABA_output = [MRS_struct.out.vox1.NAA.ConcIU MRS_struct.out.vox1.NAA.ConcCr MRS_struct.out.vox1.Cho.ConIU MRS_struct.out.vox1.Cho.ConcCr];
+  
+  GABA_output = [MRS_struct.out.vox1.NAA.Area MRS_struct.out.vox1.Cho.Area];
   GABA_output = GABA_output';
   
   all_summary = ([all_summary, GABA_output]);
   end
-
+  
 %%  Save output from individual subject as a structure (could create structure for all subjects)
 
 subject_data(bigK).subject_ID = OutName;
@@ -86,5 +78,5 @@ subject_data(bigK).all_summary = all_summary;
 %summary(bigK).HP = hippocampus;
 %summary(bigK).Parietal = Parietal;
 %summary(bigK).sma = sma;
-  
+
 end
