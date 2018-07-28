@@ -61,18 +61,22 @@ for bigK=1:length(FILE)
   load ([all_all{x}, '/MRS_struct.mat']);
   
   if isfield(MRS_struct.out.vox1,'water')
-      MRS_struct.out.vox1.NAA.ConcIU = MRS_struct.out.vox1.NAA.ConcIU;
-      MRS_struct.out.vox1.NAA.ConcCr = MRS_struct.out.vox1.NAA.ConcCr;
-      MRS_struct.out.vox1.Cho.ConIU = MRS_struct.out.vox1.Cho.ConcIU;
-      MRS_struct.out.vox1.Cho.ConcCr = MRS_struct.out.vox1.Cho.ConcCr;
+      MRS_struct.out.vox1.water.Area = MRS_struct.out.vox1.water.Area;
+      MRS_struct.out.vox1.Cr.Area = MRS_struct.out.vox1.Cr.Area;
+      MRS_struct.out.vox1.GABA.ConcIU = MRS_struct.out.vox1.GABA.ConcIU;
+      MRS_struct.out.vox1.GABA.ConcCr = MRS_struct.out.vox1.GABA.ConcCr;
+      MRS_struct.out.vox1.Glx.ConIU = MRS_struct.out.vox1.Glx.ConcIU;
+      MRS_struct.out.vox1.Glx.ConcCr = MRS_struct.out.vox1.Glx.ConcCr;
   else
-      MRS_struct.out.vox1.NAA.ConcIU = 99999;
-      MRS_struct.out.vox1.NAA.ConcCr = MRS_struct.out.vox1.NAA.ConcCr;
-      MRS_struct.out.vox1.Cho.ConIU = 99999;
-      MRS_struct.out.vox1.Cho.ConcCr = MRS_struct.out.vox1.Cho.ConcCr;
+      MRS_struct.out.vox1.water.Area = 99999;
+      MRS_struct.out.vox1.Cr.Area = MRS_struct.out.vox1.Cr.Area;
+      MRS_struct.out.vox1.GABA.ConcIU = 99999;
+      MRS_struct.out.vox1.GABA.ConcCr = MRS_struct.out.vox1.GABA.ConcCr;
+      MRS_struct.out.vox1.Glx.ConIU = 99999;
+      MRS_struct.out.vox1.Glx.ConcCr = MRS_struct.out.vox1.Glx.ConcCr;
   end
   
-  GABA_output = [MRS_struct.out.vox1.NAA.ConcIU MRS_struct.out.vox1.NAA.ConcCr MRS_struct.out.vox1.Cho.ConIU MRS_struct.out.vox1.Cho.ConcCr];
+  GABA_output = [MRS_struct.out.vox1.water.Area MRS_struct.out.vox1.Cr.Area MRS_struct.out.vox1.GABA.ConcIU MRS_struct.out.vox1.GABA.ConcCr MRS_struct.out.vox1.Glx.ConIU MRS_struct.out.vox1.Glx.ConcCr];
   GABA_output = GABA_output';
   
   all_summary = ([all_summary, GABA_output]);
