@@ -8,7 +8,6 @@
 %Chao Suo 2015
 
 for i = 1:length(a);
-
 MRS_struct = GannetLoad({[b a{i}]});
 MRS_struct = GannetFit (MRS_struct);
 [c d e] = fileparts (a{i});
@@ -18,6 +17,7 @@ movefile ('MRS_struct.mat', [b d]);
 f = dir([b 'MRSf*']);
 %movefile ([b f.name filesep 'MRS_struct.mat'], [b d]);
 end
+
 
 
 
