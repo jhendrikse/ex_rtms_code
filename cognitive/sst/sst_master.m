@@ -3,7 +3,7 @@ function [ssrt_integration, ssrt_mean, mean_rt_go_corr, mean_rt_go_uncorr, corr_
 % This function can be used to analyse the BMH version of the stop-signal task, and outputs the mean reaction time for correct go trials, and the stop signal response time according to both the integration and mean methods, 
 ... as specified in Verbruggen, F., Chambers, C. D., & Logan, G. D. (2013). Fictitious inhibitory differences: how skewness and slowing distort the estimation of stopping latencies. Psychological Science, 24, 352?362.
 
-data = importfile_SST(filename_SST)
+data = importfile_SST(filename_SST);
 
 %% calculate mean RT on go trials 
 

@@ -19,19 +19,25 @@ for x = 1:length(ActiveID)
     
     pathIn_mod = dir([char(pathIn),'/Active/',char(ActiveID(x,1)),'/Cognitive/','wk*']);
     
-    Condition = {pathIn_mod(1).name; pathIn_mod(2).name}
+    Condition = {pathIn_mod(1).name; pathIn_mod(2).name};
     
     for y = 1:length(Condition)
         
         for z = 1:length(timePoint)
             
-            filename_nback = [char(pathIn),'/Active/',char(ActiveID(x,1)),'/Cognitive/',char(Condition(y,1)),'/n_back/',char(timePoint(z,1)),'/',char(ActiveID(x,1)),'_',char(timePoint(z,1)),'.xlsx']
+            filename_nback = [char(pathIn),'/Active/',char(ActiveID(x,1)),'/Cognitive/',char(Condition(y,1)),'/n_back/',char(timePoint(z,1)),'/',char(ActiveID(x,1)),'_',char(timePoint(z,1)),'.xlsx'];
             
             % filename = [pathIn,'/','Active','/',ActiveID(x,1),'/','Cognitive','/',Condition(y,1),'/','SST','/',timePoint(z,1),'/','SST_',ActiveID(x,1),'_',timePoint(z,1),'.dat'] 
             
             [hits(y,z),misses(y,z),fAlarm(y,z),hitsRT(y,z),dPrime(y,z)] = n_back_master(filename_nback);
         end
     end
+    
+      Active_data = cell2struct(ActiveID,{'S2_MS';'S3_DJ';'S4_JM';'S5_RD';'S6_KV';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S16_YS';'S17_JTR';'S19_JA';'S20_WO';'S22_NS';'S25_SC';'S27_ANW';'S33_DJG';'S34_ST';'S35_TG';'S36_AY'},20)
+      Active_data.ActiveID.Condition = Condition
+%     Active_data.ActiveID.Condition.timePoint = timePoint
+%     Active_data.ActiveID.Condition.timePoint.nback = hits, misses,fAlarm,hitsRT,dPrime
+ 
 end
 
 
@@ -41,13 +47,13 @@ for x = 1:length(InactiveID)
     
     pathIn_mod = dir([char(pathIn),'/Inactive/',char(InactiveID(x,1)),'/Cognitive/','wk*']);
        
-    Condition = {pathIn_mod(1).name; pathIn_mod(2).name}
+    Condition = {pathIn_mod(1).name; pathIn_mod(2).name};
     
     for y = 1:length(Condition)
         
-        for z = 1:lenght(timePoint)
+        for z = 1:length(timePoint)
             
-            filename_nback = [char(pathIn),'/Inactive/',char(InactiveID(x,1)),'/Cognitive/',char(Condition(y,1)),'/n_back/',char(timePoint(z,1)),'/',char(InactiveID(x,1)),'_',char(timePoint(z,1)),'.xlsx']
+            filename_nback = [char(pathIn),'/Inactive/',char(InactiveID(x,1)),'/Cognitive/',char(Condition(y,1)),'/n_back/',char(timePoint(z,1)),'/',char(InactiveID(x,1)),'_',char(timePoint(z,1)),'.xlsx'];
            
             [hits(y,z),misses(y,z),fAlarm(y,z),hitsRT(y,z),dPrime(y,z)] = n_back_master(filename_nback);
         end
