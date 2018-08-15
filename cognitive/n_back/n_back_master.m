@@ -28,4 +28,12 @@ correctRT = targetRT(correct);
 hitsRT = mean(double(correctRT));
 
 % Calculate dprime
-dPrime = norminv(hits/length(target)) - norminv(fAlarm/length(notarget));
+if (fAlarm > 0 & misses > 0)
+    dPrime = norminv(hits/length(target)) - norminv(fAlarm/length(notarget));
+else
+    hits_mod = hits + 0.5 ; 
+    fAlarm_mod = fAlarm + 0.5 ;
+    target_mod = length(target) + 1 ;
+    notarget_mod = length(notarget) + 1 ;
+    dPrime = norminv(hits_mod/target_mod) - norminv(fAlarm_mod/notarget_mod);
+end
