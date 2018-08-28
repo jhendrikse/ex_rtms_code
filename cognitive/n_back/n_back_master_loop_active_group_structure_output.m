@@ -52,11 +52,9 @@ for x = 1:length(InactiveID)
             
             filename_nback = [char(pathIn),'/Inactive/',char(InactiveID(x,1)),'/Cognitive/',char(Condition(y,1)),'/n_back/',char(timePoint(z,1)),'/',char(InactiveID(x,1)),'_',char(timePoint(z,1)),'.xlsx'];
            
-            [hits(y,z),misses(y,z),fAlarm(y,z),hitsRT(y,z),dPrime(y,z)] = n_back_master(filename_nback);
+            [Inactive_data.(InactiveID{x}).(Condition{y}).(timePoint{z}).hits,Inactive_data.(InactiveID{x}).(Condition{y}).(timePoint{z}).misses,Inactive_data.(InactiveID{x}).(Condition{y}).(timePoint{z}).fAlarm,Inactive_data.(InactiveID{x}).(Condition{y}).(timePoint{z}).hitsRT,Inactive_data.(InactiveID{x}).(Condition{y}).(timePoint{z}).dPrime] = n_back_master(filename_nback);
         end
     end
 end
 
-
-%======Output cell================
 

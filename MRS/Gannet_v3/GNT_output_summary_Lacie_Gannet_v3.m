@@ -19,7 +19,7 @@ cd (datapath);
 % Select subjects to run analysis on
 filter_str = ''; fileselect; pause(0.1); % calls fileselect.m located in Gannet3.0-master directory
 
-%% Calculate GABA concentrations and data metrics from GANNET V3 MRS_struct.mat files
+%% Calculate GABA concentrations and data metrics from GANNET_V3 MRS_struct.mat files
 
 for bigK=1:length(FILE)
     
@@ -57,7 +57,7 @@ for bigK=1:length(FILE)
   
   all_all = [HP_pre, HP_post, PTL_pre, PTL_post, SMA_pre, SMA_post]; %Creates matrix which includes path to all three voxel files at both timepoints
   
-  for x = 1:length(all_all) % determine if water twix are present, returns missing data as 99999 if not found. 
+  for x = 1:length(all_all)  % determine if water twix are present, returns missing data as 99999 if not found. 
   load ([all_all{x}, '/MRS_struct.mat']);
   
   if isfield(MRS_struct.out.vox1,'water')
