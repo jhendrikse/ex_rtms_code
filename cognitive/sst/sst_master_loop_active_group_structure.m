@@ -57,5 +57,3 @@ for x = 1:length(InactiveID)
     end
 end
 
-%======Output cell================
-

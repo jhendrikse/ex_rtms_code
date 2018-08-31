@@ -49,7 +49,12 @@ incorr_prob_stop_trial = total_stop_trial_incorr/ total_ss_trial ; %calculate th
 nth_index_delay = round((total_go_trial_corr .* incorr_prob_stop_trial),0); % multiplies the total number of go trials by the percentage of incorrect stop trials (i.e. p(respond|signal)) & rounds to closest integer
 % also include stop fail rts 
 
-ssrt_integration = (rorder_go_rt(nth_index_delay)) - mean_ssd ;% ssrt w/integration method (nth go rt - mean ssd)
-ssrt_mean = mean_rt_go_corr - mean_ssd ; % ssrt w/mean method 
-
+if (data.expressionsssrt(length(data.expressionsssrt))) > 0
+    ssrt_integration = (rorder_go_rt(nth_index_delay)) - mean_ssd ;% ssrt w/integration method (nth go rt - mean ssd)
+    ssrt_mean = mean_rt_go_corr - mean_ssd ; % ssrt w/mean method
+else
+    ssrt_integration = 99999;% ssrt w/integration method (nth go rt - mean ssd)
+    ssrt_mean = 99999 ; % ssrt w/mean method
+end
+    
 
