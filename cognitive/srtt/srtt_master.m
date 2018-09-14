@@ -13,8 +13,8 @@ error_response = data.key_resp_1rt > (mean_response + (2.7*(std(data.key_resp_1r
 
 data.key_resp_1rt(error_response == 1) = NaN; % replace error trials with NaNs 
 
-mean_random_trial = nanmean(data.key_resp_1rt([351:400],:)); % calculate mean of last 50 random trials
+mean_random_trial = nanmean(data.key_resp_1rt(351:400,:)); % calculate mean of last 50 random trials
 
-mean_sequence_trial = nanmean(data.key_resp_1rt([301:350],:)); % calculate the mean of the last 50 sequential trials 
+mean_sequence_trial = nanmean(data.key_resp_1rt(301:350,:)); % calculate the mean of the last 50 sequential trials 
 
 learning_score = mean_random_trial - mean_sequence_trial ; % learning_score = mean_random - mean_sequential 

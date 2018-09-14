@@ -26,6 +26,8 @@ for x = 1:length(ID)
             
             [Data.(ID{x}).(Condition{y}).hits(1,z),Data.(ID{x}).(Condition{y}).misses(1,z),Data.(ID{x}).(Condition{y}).fAlarm(1,z),Data.(ID{x}).(Condition{y}).hitsRT(1,z),Data.(ID{x}).(Condition{y}).dPrime(1,z)] = n_back_master(filename_nback);
             
+            
+            
         end
     end
    
