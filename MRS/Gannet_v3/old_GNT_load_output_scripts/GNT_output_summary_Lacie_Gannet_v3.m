@@ -1,5 +1,3 @@
-%% Define file path
-
 % This script takes the GABA concentrations for the pre and post scans from the left hippocampus, left parietal, and SMA voxels and outputs them (& other data metrics) into a six column matrix 
 % + subject structure (subject_data). 
 
@@ -84,7 +82,7 @@ for bigK=1:length(FILE)
   all_summary = ([all_summary, GABA_output]);
   end
 
-%%  Save output from individual subject as a structure (could also create structure for all subjects)
+%%  Save output from individual subject as a structure (could create structure for all subjects)
 
 subject_data(bigK).subject_ID = OutName;
 subject_data(bigK).all_summary = all_summary;
