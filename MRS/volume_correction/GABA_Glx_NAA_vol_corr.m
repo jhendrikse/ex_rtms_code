@@ -28,10 +28,12 @@ ID = {'S3_DJ';'S5_RD';'S6_KV';'S7_PK';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S13_MD'
 
 % ID = {'S44_ID'} % 'S3_DJ';} ; 
 
+% Denotes subjects who are in active group and inactive group 
 ActiveID = {'S3_DJ';'S5_RD';'S6_KV';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S16_YS';'S17_JTR';'S19_JA';'S20_WO';'S22_NS';'S25_SC';'S27_ANW';'S33_DJG';'S34_ST';'S35_TG';'S36_AY'} ; % subjects from physically active group
 
 InactiveID = {'S7_PK';'S13_MD';'S15_AZ';'S18_KF';'S21_KC';'S24_AU';'S26_KW';'S28_XK';'S29_HZ';'S30_PKA';'S31_AR';'S32_CD';'S37_JT';'S38_CR';'S39_EH';'S40_NU';'S41_JC';'S42_SA';'S43_PL';'S44_ID'} ; % subjects from inactive active group
 
+% Denotes subjects who received rTMS to llpc target or sma target in wk1
 llpcID = {'DJ_03';'RD_05';'SF_09';'JT_10';'MD_13';'AZ_15';'YS_16';'JTR_17';'KF_18';'WO_20';'KC_21';'XK_28';'AR_31';'ST_34';'TG_35';'CR_38';'JC_41';'SA_42';'PL_43'} ; % subjects who received LLPC rTMS
 
 smaID = {'KV_06';'PK_07';'AW_08';'RB_11';'JA_19';'NS_22';'AU_24';'SC_25';'KW_26';'ANW_27';'HZ_29';'PKA_30';'CD_32';'DJG_33';'AY_36';'JT_37';'EH_39';'NU_40';'ID_44'} ; % subjects who received SMA rTMS
@@ -136,7 +138,7 @@ HP_pre_GABA_FWHM_summary = cell(length(ID),1) ;
 
 for z = 1:length(GABA_HP_pre_path)
     
-    if ismissing(GABA_HP_post_path(z),'<missing>') == 0
+    if ismissing(GABA_HP_pre_path(z),'<missing>') == 0 % check that file path exists, if yes, load. 
         
         % load Gannet output structure for HP pre path for each subject
         
@@ -148,7 +150,7 @@ for z = 1:length(GABA_HP_pre_path)
         % values (could save as .csv or .txt file)
         
         if isfield(MRS_struct.out.vox1,'water')
-        
+            
             HP_pre_GABA_water = MRS_struct.out.vox1.GABA.ConcIU ;
             HP_pre_water_area = MRS_struct.out.vox1.water.Area ;
             HP_pre_water_SNR  = MRS_struct.out.vox1.water.SNR ;
@@ -161,57 +163,54 @@ for z = 1:length(GABA_HP_pre_path)
             HP_pre_water_fit_error = NaN ;
             HP_pre_water_FWHM = NaN ;
         end
-    
-    
-    else
         
-        HP_pre_GABA_water_summary{z,:} = NaN ;
-        HP_pre_GABA_water_summary_array = cell2mat(HP_pre_GABA_water_summary) ;
-    
-        HP_pre_GABA_cr_summary{z,:} = NaN ;
-        HP_pre_GABA_cr_summary_array = cell2mat(HP_pre_GABA_cr_summary) ;
+        % save concentration estimates 
+        HP_pre_GABA_Cr = MRS_struct.out.vox1.GABA.ConcCr ;
+        HP_pre_GABA_NAA = MRS_struct.out.vox1.GABA.ConcNAA ;
         
-        HP_pre_GABA_NAA_summary{z,:} = NaN ;
-        HP_pre_GABA_NAA_summary_array = cell2mat(HP_pre_GABA_NAA_summary) ;
+        % save data QC estimates 
+        HP_pre_GABA_fit_err = MRS_struct.out.vox1.GABA.FitError ; 
+        HP_pre_GABA_SNR = MRS_struct.out.vox1.GABA.SNR ;
+        HP_pre_GABA_FWHM = MRS_struct.out.vox1.GABA.FWHM ;
         
-        % Save data quality metrics for HP pre GABA as cell & array
-        HP_pre_GABA_fit_err_summary{z,:} = MRS_struct.out.vox1.GABA.FitError ;
-        HP_pre_GABA_fit_err_summary_array = cell2mat(HP_pre_GABA_fit_err_summary) ;
-    
-        HP_pre_GABA_SNR_summary{z,:} = MRS_struct.out.vox1.GABA.SNR ;
-        HP_pre_GABA_SNR_summary_array = cell2mat(HP_pre_GABA_SNR_summary) ;
+    elseif ismissing(GABA_HP_pre_path(z),'<missing>') == 1 % otherwise, if file path is missing, return NaN's for all fields.
         
-        HP_pre_GABA_FWHM_summary{z,:} = MRS_struct.out.vox1.GABA.FWHM ;
-        HP_pre_GABA_FWHM_summary_array = cell2mat(HP_pre_GABA_FWHM_summary)
-    
+        HP_pre_GABA_water = NaN ;
+        HP_pre_GABA_Cr = NaN ; 
+        HP_pre_GABA_NAA = NaN ; 
         
+        HP_pre_water_area = NaN ;
+        HP_pre_water_SNR  = NaN ;
+        HP_pre_water_fit_error = NaN ;
+        HP_pre_water_FWHM = NaN ;
+        
+        HP_pre_GABA_fit_err = NaN ;
+        HP_pre_GABA_SNR = NaN ;
+        HP_pre_GABA_FWHM = NaN ;
     end
-    
     
     % Save output variables for HP pre timepoint
     
     % Save GABA concentrations referenced to water, Cr, and NAA as cell &
     % array 
     HP_pre_GABA_water_summary{z,:} = HP_pre_GABA_water ;
-    HP_pre_GABA_water_summary_array = cell2mat(HP_pre_GABA_water_summary) ;
-    
-    HP_pre_GABA_cr_summary{z,:} = MRS_struct.out.vox1.GABA.ConcCr ;
-    HP_pre_GABA_cr_summary_array = cell2mat(HP_pre_GABA_cr_summary) ;
-    
-    HP_pre_GABA_NAA_summary{z,:} = MRS_struct.out.vox1.GABA.ConcNAA ;
-    HP_pre_GABA_NAA_summary_array = cell2mat(HP_pre_GABA_NAA_summary) ; 
-    
+    HP_pre_GABA_cr_summary{z,:} =  HP_pre_GABA_Cr ;
+    HP_pre_GABA_NAA_summary{z,:} = HP_pre_GABA_NAA ;
+  
     % Save data quality metrics for HP pre GABA as cell & array
-    HP_pre_GABA_fit_err_summary{z,:} = MRS_struct.out.vox1.GABA.FitError ; 
-    HP_pre_GABA_fit_err_summary_array = cell2mat(HP_pre_GABA_fit_err_summary) ;
-    
-    HP_pre_GABA_SNR_summary{z,:} = MRS_struct.out.vox1.GABA.SNR ;
-    HP_pre_GABA_SNR_summary_array = cell2mat(HP_pre_GABA_SNR_summary) ; 
-    
-    HP_pre_GABA_FWHM_summary{z,:} = MRS_struct.out.vox1.GABA.FWHM ;
-    HP_pre_GABA_FWHM_summary_array = cell2mat(HP_pre_GABA_FWHM_summary) ; 
+    HP_pre_GABA_fit_err_summary{z,:} = HP_pre_GABA_fit_err ; 
+    HP_pre_GABA_SNR_summary{z,:} = HP_pre_GABA_SNR ;
+    HP_pre_GABA_FWHM_summary{z,:} = HP_pre_GABA_FWHM ;
     
 end
+
+% Reformat output cell to numerical array
+HP_pre_GABA_water_summary_array = cell2mat(HP_pre_GABA_water_summary) ;
+HP_pre_GABA_cr_summary_array = cell2mat(HP_pre_GABA_cr_summary) ;
+HP_pre_GABA_NAA_summary_array = cell2mat(HP_pre_GABA_NAA_summary) ; 
+HP_pre_GABA_fit_err_summary_array = cell2mat(HP_pre_GABA_fit_err_summary) ;    
+HP_pre_GABA_SNR_summary_array = cell2mat(HP_pre_GABA_SNR_summary) ; 
+HP_pre_GABA_FWHM_summary_array = cell2mat(HP_pre_GABA_FWHM_summary) ; 
 
 % Output HP pre concentrations & data quality metrics 
 
@@ -228,31 +227,59 @@ HP_post_GABA_fit_err_summary = cell(length(ID),1) ;
 HP_post_GABA_SNR_summary = cell(length(ID),1) ;
 HP_post_GABA_FWHM_summary = cell(length(ID),1) ;
 
-% for loop across HP post time point across subjects 
+% for loop across HP post time point across subjects  
 
 for z = 1:length(GABA_HP_post_path)
     
-    % load Gannet output structure for HP post path for each subject
-    load([GABA_HP_post_path{z},'/','MRS_struct.mat'],'-mat','MRS_struct') 
-    
-    % check that output structure contains water reference, else return
-    % NaNs for water fields - could change this to input estimated values 
-    % For two subjects without water estimates will need to import ratio
-    % values (could save as .csv or .txt file)
-    
-    if isfield(MRS_struct.out.vox1,'water')
+    if ismissing(GABA_HP_post_path(z),'<missing>') == 0 % check that file path exists, if yes, load. 
         
-        HP_post_GABA_water = MRS_struct.out.vox1.GABA.ConcIU ;
-        HP_post_water_area = MRS_struct.out.vox1.water.Area ;
-        HP_post_water_SNR  = MRS_struct.out.vox1.water.SNR ;
-        HP_post_water_fit_error = MRS_struct.out.vox1.water.FitError ;
-        HP_post_water_FWHM = MRS_struct.out.vox1.water.FWHM ;     
-    else
-        HP_post_GABA_water = NaN ;  
+        % load Gannet output structure for HP pre path for each subject
+        
+        load([GABA_HP_post_path{z},'/','MRS_struct.mat'],'-mat','MRS_struct')
+        
+        % check that output structure contains water reference, else return
+        % NaNs for water fields - could change this to input estimated values
+        % For two subjects without water estimates will need to import ratio
+        % values (could save as .csv or .txt file)
+        
+        if isfield(MRS_struct.out.vox1,'water')
+            
+            HP_post_GABA_water = MRS_struct.out.vox1.GABA.ConcIU ;
+            HP_post_water_area = MRS_struct.out.vox1.water.Area ;
+            HP_post_water_SNR  = MRS_struct.out.vox1.water.SNR ;
+            HP_post_water_fit_error = MRS_struct.out.vox1.water.FitError ;
+            HP_post_water_FWHM = MRS_struct.out.vox1.water.FWHM ;
+        else
+            HP_post_GABA_water = NaN ;
+            HP_post_water_area = NaN ;
+            HP_post_water_SNR  = NaN ;
+            HP_post_water_fit_error = NaN ;
+            HP_post_water_FWHM = NaN ;
+        end
+        
+        % save concentration estimates 
+        HP_post_GABA_Cr = MRS_struct.out.vox1.GABA.ConcCr ;
+        HP_post_GABA_NAA = MRS_struct.out.vox1.GABA.ConcNAA ;
+        
+        % save data QC estimates 
+        HP_post_GABA_fit_err = MRS_struct.out.vox1.GABA.FitError ; 
+        HP_post_GABA_SNR = MRS_struct.out.vox1.GABA.SNR ;
+        HP_post_GABA_FWHM = MRS_struct.out.vox1.GABA.FWHM ;
+        
+    elseif ismissing(GABA_HP_post_path(z),'<missing>') == 1 % otherwise, if file path is missing, return NaN's for all fields.
+        
+        HP_post_GABA_water = NaN ;
+        HP_post_GABA_Cr = NaN ; 
+        HP_post_GABA_NAA = NaN ; 
+        
         HP_post_water_area = NaN ;
         HP_post_water_SNR  = NaN ;
         HP_post_water_fit_error = NaN ;
         HP_post_water_FWHM = NaN ;
+        
+        HP_post_GABA_fit_err = NaN ;
+        HP_post_GABA_SNR = NaN ;
+        HP_post_GABA_FWHM = NaN ;
     end
     
     % Save output variables for HP post timepoint
@@ -260,30 +287,36 @@ for z = 1:length(GABA_HP_post_path)
     % Save GABA concentrations referenced to water, Cr, and NAA as cell &
     % array 
     HP_post_GABA_water_summary{z,:} = HP_post_GABA_water ;
-    HP_post_GABA_water_summary_array = cell2mat(HP_post_GABA_water_summary) ;
-    
-    HP_post_GABA_cr_summary{z,:} = MRS_struct.out.vox1.GABA.ConcCr ;
-    HP_post_GABA_cr_summary_array = cell2mat(HP_post_GABA_cr_summary) ;
-    
-    HP_post_GABA_NAA_summary{z,:} = MRS_struct.out.vox1.GABA.ConcNAA ;
-    HP_post_GABA_NAA_summary_array = cell2mat(HP_post_GABA_NAA_summary) ; 
-    
-    % Save data quality metrics for HP pre GABA as cell & array
-    HP_post_GABA_fit_err_summary{z,:} = MRS_struct.out.vox1.GABA.FitError ; 
-    HP_post_GABA_fit_err_summary_array = cell2mat(HP_post_GABA_fit_err_summary) ;
-    
-    HP_post_GABA_SNR_summary{z,:} = MRS_struct.out.vox1.GABA.SNR ;
-    HP_post_GABA_SNR_summary_array = cell2mat(HP_post_GABA_SNR_summary) ; 
-    
-    HP_post_GABA_FWHM_summary{z,:} = MRS_struct.out.vox1.GABA.FWHM ;
-    HP_post_GABA_FWHM_summary_array = cell2mat(HP_post_GABA_FWHM_summary) ; 
+    HP_post_GABA_cr_summary{z,:} =  HP_post_GABA_Cr ;
+    HP_post_GABA_NAA_summary{z,:} = HP_post_GABA_NAA ;
+  
+    % Save data quality metrics for HP post GABA as cell & array
+    HP_post_GABA_fit_err_summary{z,:} = HP_post_GABA_fit_err ; 
+    HP_post_GABA_SNR_summary{z,:} = HP_post_GABA_SNR ;
+    HP_post_GABA_FWHM_summary{z,:} = HP_post_GABA_FWHM ;
     
 end
 
-% Output HP post concentrations & data quality metrics 
+% Reformat output cell to numerical array
+HP_post_GABA_water_summary_array = cell2mat(HP_post_GABA_water_summary) ;
+HP_post_GABA_cr_summary_array = cell2mat(HP_post_GABA_cr_summary) ;
+HP_post_GABA_NAA_summary_array = cell2mat(HP_post_GABA_NAA_summary) ; 
+HP_post_GABA_fit_err_summary_array = cell2mat(HP_post_GABA_fit_err_summary) ;    
+HP_post_GABA_SNR_summary_array = cell2mat(HP_post_GABA_SNR_summary) ; 
+HP_post_GABA_FWHM_summary_array = cell2mat(HP_post_GABA_FWHM_summary) ; 
+
+% Output HP pre concentrations & data quality metrics 
 
 HP_post_GABA_conc = [HP_post_GABA_water_summary_array, HP_post_GABA_cr_summary_array, HP_post_GABA_NAA_summary_array] ;
 HP_post_GABA_data_QC = [HP_post_GABA_fit_err_summary_array, HP_post_GABA_SNR_summary_array, HP_post_GABA_FWHM_summary_array] ; 
+
+%===================== HP pre & post summary =================%
+
+% Further effort required - ideally output row for variable names & ID 
+
+HP_GABA_conc_all_summary = [HP_pre_GABA_conc,HP_post_GABA_conc] ;
+HP_GABA_data_QC_all_summary = [HP_pre_GABA_data_QC,HP_post_GABA_data_QC] ;
+
 
 
 %% LEFT PARIETAL CORTEX
