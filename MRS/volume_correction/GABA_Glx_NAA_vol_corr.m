@@ -26,7 +26,7 @@ pathIn_specdata = [pathIn,'all_subjects/'];
 
 ID = {'S3_DJ';'S5_RD';'S6_KV';'S7_PK';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S13_MD';'S15_AZ';'S16_YS';'S17_JTR';'S18_KF';'S19_JA';'S20_WO';'S21_KC';'S22_NS';'S24_AU';'S25_SC';'S26_KW';'S27_ANW';'S28_XK';'S29_HZ';'S30_PKA';'S31_AR';'S32_CD';'S33_DJG';'S34_ST';'S35_TG';'S36_AY';'S37_JT';'S38_CR';'S39_EH';'S40_NU';'S41_JC';'S42_SA';'S43_PL';'S44_ID'} ; % all subjects
 
-% ID = {'S44_ID'} ; 
+% ID = {'S44_ID'} % 'S3_DJ';} ; 
 
 ActiveID = {'S3_DJ';'S5_RD';'S6_KV';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S16_YS';'S17_JTR';'S19_JA';'S20_WO';'S22_NS';'S25_SC';'S27_ANW';'S33_DJG';'S34_ST';'S35_TG';'S36_AY'} ; % subjects from physically active group
 
@@ -60,59 +60,58 @@ GABA_SMA_post_path = cell(length(ID),1) ;
 
 for y = 1:length(ID) %for loop to extract filepaths for each voxel at each timepoint
     
+    %HP GABA pre timepoint file path
     GABA_HP_pre_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Pre/','GABA_only/','meas_*_hippocampus']) ; % generate absolute path to data dir
     
-    if  exist([GABA_HP_pre_dir.folder,'/',GABA_HP_pre_dir.name]) == 7 % works for dir that exists
-        %isfolder([GABA_HP_pre_dir.folder,'/',GABA_HP_pre_dir.name]) == 1
-        %exist([GABA_HP_pre_dir.folder,'/',GABA_HP_pre_dir.name],'dir') == 7
-        %isempty([GABA_HP_pre_dir.folder,'/',GABA_HP_pre_dir.name]) == 1
+    if  isempty([GABA_HP_pre_dir.name]) == 0
         GABA_HP_pre_path{y,:} = [GABA_HP_pre_dir.folder,'/',GABA_HP_pre_dir.name] ; % if exists, save absolute path to cell array
     else
-        GABA_HP_pre_path{y,:} = NaN ; % else, save NaN
+        GABA_HP_pre_path{y,:} = '<missing>' ; % else, leave empty
     end
-    % still need to work on this section. 
-end
-    
-% need to repeat for these other time points 
 
-    %PTL GABA pre timepoint file path
-    if  isfolder([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Pre/','GABA_only/','meas_*_parietal']) == 1
-        GABA_PTL_pre_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Pre/','GABA_only/','meas_*_parietal']) ;
+    %PTL GABA pre timepoint file path    
+    GABA_PTL_pre_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Pre/','GABA_only/','meas_*_parietal']) ;
+    
+    if  isempty([GABA_PTL_pre_dir.name]) == 0
         GABA_PTL_pre_path{y,:} = [GABA_PTL_pre_dir.folder,'/',GABA_PTL_pre_dir.name] ;
     else
-        GABA_PTL_pre_path{y,:} = NaN ;
+        GABA_PTL_pre_path{y,:} = '<missing>' ;
     end
     
     %SMA GABA pre timepoint file path
-    if isfolder([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Pre/','GABA_only/','meas_*_sma']) == 1
-        GABA_SMA_pre_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Pre/','GABA_only/','meas_*_sma']) ;
+    GABA_SMA_pre_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Pre/','GABA_only/','meas_*_sma']) ;
+    
+    if  isempty([GABA_SMA_pre_dir.name]) == 0
         GABA_SMA_pre_path{y,:} = [GABA_SMA_pre_dir.folder,'/',GABA_SMA_pre_dir.name] ;
     else
-        GABA_SMA_pre_path{y,:} = NaN ;
+        GABA_SMA_pre_path{y,:} = '<missing>' ;
     end
     
     %HP GABA post timepoint file path
-    if isfolder([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_hippocampus']) == 1
-        GABA_HP_post_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_hippocampus']) ;
+    GABA_HP_post_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_hippocampus']) ;
+    
+    if  isempty([GABA_HP_post_dir.name]) == 0
         GABA_HP_post_path{y,:} = [GABA_HP_post_dir.folder,'/',GABA_HP_post_dir.name] ;
     else
-        GABA_HP_post_path{y,:} = NaN ;
+        GABA_HP_post_path{y,:} = '<missing>' ;
     end
     
     %PTL GABA post timepoint file path
-    if isfolder([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_parietal']) == 1
-        GABA_PTL_post_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_parietal']) ;
+    GABA_PTL_post_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_parietal']) ;
+    
+    if  isempty([GABA_PTL_post_dir.name]) == 0
         GABA_PTL_post_path{y,:} = [GABA_HP_post_dir.folder,'/',GABA_HP_post_dir.name] ;
     else
-        GABA_PTL_post_path{y,:} = NaN ;
+        GABA_PTL_post_path{y,:} = '<missing>' ;
     end
     
     %SMA GABA post timepoint file path
-    if isfolder([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_sma']) == 1
-        GABA_SMA_post_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_sma']) ;
+    GABA_SMA_post_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_sma']) ;
+    
+    if  isempty([GABA_PTL_post_dir.name]) == 0
         GABA_SMA_post_path{y,:} = [GABA_SMA_post_dir.folder,'/',GABA_SMA_post_dir.name] ;
     else
-        GABA_SMA_post_path{y,:} = NaN ;
+        GABA_SMA_post_path{y,:} = '<missing>' ;
     end
 end
 
@@ -137,30 +136,57 @@ HP_pre_GABA_FWHM_summary = cell(length(ID),1) ;
 
 for z = 1:length(GABA_HP_pre_path)
     
-    % load Gannet output structure for HP pre path for each subject
+    if ismissing(GABA_HP_post_path(z),'<missing>') == 0
         
-    load([GABA_HP_pre_path{z},'/','MRS_struct.mat'],'-mat','MRS_struct') 
-    
-    
-    % check that output structure contains water reference, else return
-    % NaNs for water fields - could change this to input estimated values 
-    % For two subjects without water estimates will need to import ratio
-    % values (could save as .csv or .txt file)
-    
-    if isfield(MRS_struct.out.vox1,'water')
+        % load Gannet output structure for HP pre path for each subject
         
-        HP_pre_GABA_water = MRS_struct.out.vox1.GABA.ConcIU ;
-        HP_pre_water_area = MRS_struct.out.vox1.water.Area ;
-        HP_pre_water_SNR  = MRS_struct.out.vox1.water.SNR ;
-        HP_pre_water_fit_error = MRS_struct.out.vox1.water.FitError ;
-        HP_pre_water_FWHM = MRS_struct.out.vox1.water.FWHM ;  
+        load([GABA_HP_pre_path{z},'/','MRS_struct.mat'],'-mat','MRS_struct')
+        
+        % check that output structure contains water reference, else return
+        % NaNs for water fields - could change this to input estimated values
+        % For two subjects without water estimates will need to import ratio
+        % values (could save as .csv or .txt file)
+        
+        if isfield(MRS_struct.out.vox1,'water')
+        
+            HP_pre_GABA_water = MRS_struct.out.vox1.GABA.ConcIU ;
+            HP_pre_water_area = MRS_struct.out.vox1.water.Area ;
+            HP_pre_water_SNR  = MRS_struct.out.vox1.water.SNR ;
+            HP_pre_water_fit_error = MRS_struct.out.vox1.water.FitError ;
+            HP_pre_water_FWHM = MRS_struct.out.vox1.water.FWHM ;
+        else
+            HP_pre_GABA_water = NaN ;
+            HP_pre_water_area = NaN ;
+            HP_pre_water_SNR  = NaN ;
+            HP_pre_water_fit_error = NaN ;
+            HP_pre_water_FWHM = NaN ;
+        end
+    
+    
     else
-        HP_pre_GABA_water = NaN ;  
-        HP_pre_water_area = NaN ;
-        HP_pre_water_SNR  = NaN ;
-        HP_pre_water_fit_error = NaN ;
-        HP_pre_water_FWHM = NaN ;
+        
+        HP_pre_GABA_water_summary{z,:} = NaN ;
+        HP_pre_GABA_water_summary_array = cell2mat(HP_pre_GABA_water_summary) ;
+    
+        HP_pre_GABA_cr_summary{z,:} = NaN ;
+        HP_pre_GABA_cr_summary_array = cell2mat(HP_pre_GABA_cr_summary) ;
+        
+        HP_pre_GABA_NAA_summary{z,:} = NaN ;
+        HP_pre_GABA_NAA_summary_array = cell2mat(HP_pre_GABA_NAA_summary) ;
+        
+        % Save data quality metrics for HP pre GABA as cell & array
+        HP_pre_GABA_fit_err_summary{z,:} = MRS_struct.out.vox1.GABA.FitError ;
+        HP_pre_GABA_fit_err_summary_array = cell2mat(HP_pre_GABA_fit_err_summary) ;
+    
+        HP_pre_GABA_SNR_summary{z,:} = MRS_struct.out.vox1.GABA.SNR ;
+        HP_pre_GABA_SNR_summary_array = cell2mat(HP_pre_GABA_SNR_summary) ;
+        
+        HP_pre_GABA_FWHM_summary{z,:} = MRS_struct.out.vox1.GABA.FWHM ;
+        HP_pre_GABA_FWHM_summary_array = cell2mat(HP_pre_GABA_FWHM_summary)
+    
+        
     end
+    
     
     % Save output variables for HP pre timepoint
     
