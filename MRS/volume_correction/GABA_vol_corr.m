@@ -7,7 +7,7 @@
 % 1) Make sure importfile_partial_vol.m is visable on the MATLAB path.
 % 2) Set paths to MRS_struct data and partial vol dataset 
 
-% Joshua Hendrikse, Jan 2019, joshua.hendrikse@monash.edu
+% Joshua Hendrikse, joshua.hendrikse@monash.edu, 2019
 
 %% Define paths & grouping variables
 
@@ -26,7 +26,7 @@ ID = {'S3_DJ';'S5_RD';'S6_KV';'S7_PK';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S13_MD'
 
 % ID = {'S44_ID'} % 'S3_DJ';} ; 
 
-% Optional looping variables for sub-group analysis 
+% Optional variables for sub-group analysis 
 
 % Denotes subjects who are in active group and inactive group 
 
@@ -113,7 +113,7 @@ for y = 1:length(ID) %for loop to extract GABA filepaths for each voxel at each 
     %SMA GABA post timepoint file path
     GABA_SMA_post_dir = dir([char(pathIn_specdata),char(ID{y,1}),'/MRI/','MRS/','Post/','GABA_only/','meas_*_sma']) ;
     
-    if  isempty([GABA_PTL_post_dir.name]) == 0
+    if  isempty([GABA_SMA_post_dir.name]) == 0
         GABA_SMA_post_path{y,:} = [GABA_SMA_post_dir.folder,'/',GABA_SMA_post_dir.name] ;
     else
         GABA_SMA_post_path{y,:} = '<missing>' ;
@@ -312,11 +312,11 @@ HP_post_GABA_FWHM_summary_array = cell2mat(HP_post_GABA_FWHM_summary) ;
 % HP_post_GABA_conc = [HP_post_GABA_water_summary_array, HP_post_GABA_cr_summary_array, HP_post_GABA_NAA_summary_array] ;
 % HP_post_GABA_data_QC = [HP_post_GABA_fit_err_summary_array, HP_post_GABA_SNR_summary_array, HP_post_GABA_FWHM_summary_array] ; 
 
-% %===================== HP pre & post summary =================%
+%===================== HP pre & post summary =================%
 
-% HP_pre_post_GABA_water = [HP_pre_GABA_water_summary_array,HP_post_GABA_water_summary_array] ;
-% HP_pre_post_GABA_cr = [HP_pre_GABA_cr_summary_array,HP_post_GABA_cr_summary_array] ; 
-% HP_pre_post_GABA_NAA = [HP_pre_GABA_NAA_summary_array,HP_post_GABA_NAA_summary_array] ;
+HP_pre_post_GABA_water = [HP_pre_GABA_water_summary_array,HP_post_GABA_water_summary_array] ;
+HP_pre_post_GABA_cr = [HP_pre_GABA_cr_summary_array,HP_post_GABA_cr_summary_array] ; 
+HP_pre_post_GABA_NAA = [HP_pre_GABA_NAA_summary_array,HP_post_GABA_NAA_summary_array] ;
 
 
 %% LEFT PARIETAL CORTEX GABA
@@ -409,9 +409,9 @@ PTL_pre_GABA_fit_err_summary_array = cell2mat(PTL_pre_GABA_fit_err_summary) ;
 PTL_pre_GABA_SNR_summary_array = cell2mat(PTL_pre_GABA_SNR_summary) ; 
 PTL_pre_GABA_FWHM_summary_array = cell2mat(PTL_pre_GABA_FWHM_summary) ; 
 
-% Output PTL pre concentrations & data quality metrics 
-PTL_pre_GABA_conc = [PTL_pre_GABA_water_summary_array, PTL_pre_GABA_cr_summary_array, PTL_pre_GABA_NAA_summary_array] ;
-PTL_pre_GABA_data_QC = [PTL_pre_GABA_fit_err_summary_array, PTL_pre_GABA_SNR_summary_array, PTL_pre_GABA_FWHM_summary_array] ; 
+% % Output PTL pre concentrations & data quality metrics 
+% PTL_pre_GABA_conc = [PTL_pre_GABA_water_summary_array, PTL_pre_GABA_cr_summary_array, PTL_pre_GABA_NAA_summary_array] ;
+% PTL_pre_GABA_data_QC = [PTL_pre_GABA_fit_err_summary_array, PTL_pre_GABA_SNR_summary_array, PTL_pre_GABA_FWHM_summary_array] ; 
 
 % Left parietal cortex post timepoint 
 
@@ -504,12 +504,12 @@ PTL_post_GABA_FWHM_summary_array = cell2mat(PTL_post_GABA_FWHM_summary) ;
 
 % PTL_post_GABA_conc = [PTL_post_GABA_water_summary_array, PTL_post_GABA_cr_summary_array, PTL_post_GABA_NAA_summary_array] ;
 % PTL_post_GABA_data_QC = [PTL_post_GABA_fit_err_summary_array, PTL_post_GABA_SNR_summary_array, PTL_post_GABA_FWHM_summary_array] ; 
-% 
+ 
 % %===================== PTL pre & post summary =================%
-% 
-% PTL_pre_post_water = [PTL_pre_GABA_water_summary_array,PTL_post_GABA_water_summary_array] ;
-% PTL_pre_post_cr = [PTL_pre_GABA_cr_summary_array,PTL_post_GABA_cr_summary_array] ; 
-% PTL_pre_post_NAA = [PTL_pre_GABA_NAA_summary_array,PTL_post_GABA_NAA_summary_array] ;
+
+PTL_pre_post_GABA_water = [PTL_pre_GABA_water_summary_array,PTL_post_GABA_water_summary_array] ;
+PTL_pre_post_GABA_cr = [PTL_pre_GABA_cr_summary_array,PTL_post_GABA_cr_summary_array] ; 
+PTL_pre_post_GABA_NAA = [PTL_pre_GABA_NAA_summary_array,PTL_post_GABA_NAA_summary_array] ;
 
 %% SUPPLEMENTARY MOTOR AREA GABA
 
@@ -601,9 +601,9 @@ SMA_pre_GABA_fit_err_summary_array = cell2mat(SMA_pre_GABA_fit_err_summary) ;
 SMA_pre_GABA_SNR_summary_array = cell2mat(SMA_pre_GABA_SNR_summary) ; 
 SMA_pre_GABA_FWHM_summary_array = cell2mat(SMA_pre_GABA_FWHM_summary) ; 
 
-% Output SMA pre concentrations & data quality metrics 
-SMA_pre_GABA_conc = [SMA_pre_GABA_water_summary_array, SMA_pre_GABA_cr_summary_array, SMA_pre_GABA_NAA_summary_array] ;
-SMA_pre_GABA_data_QC = [SMA_pre_GABA_fit_err_summary_array, SMA_pre_GABA_SNR_summary_array, SMA_pre_GABA_FWHM_summary_array] ; 
+% % Output SMA pre concentrations & data quality metrics 
+% SMA_pre_GABA_conc = [SMA_pre_GABA_water_summary_array, SMA_pre_GABA_cr_summary_array, SMA_pre_GABA_NAA_summary_array] ;
+% SMA_pre_GABA_data_QC = [SMA_pre_GABA_fit_err_summary_array, SMA_pre_GABA_SNR_summary_array, SMA_pre_GABA_FWHM_summary_array] ; 
 
 % SMA post timepoint 
 
@@ -700,9 +700,9 @@ SMA_post_GABA_FWHM_summary_array = cell2mat(SMA_post_GABA_FWHM_summary) ;
 
 %===================== SMA pre & post summary =================%
 
-% SMA_pre_post_water = [SMA_pre_GABA_water_summary_array,SMA_post_GABA_water_summary_array] ;
-% SMA_pre_post_cr = [SMA_pre_GABA_cr_summary_array,SMA_post_GABA_cr_summary_array] ; 
-% SMA_pre_post_NAA = [SMA_pre_GABA_NAA_summary_array,SMA_post_GABA_NAA_summary_array] ;
+SMA_pre_post_GABA_water = [SMA_pre_GABA_water_summary_array,SMA_post_GABA_water_summary_array] ;
+SMA_pre_post_GABA_cr = [SMA_pre_GABA_cr_summary_array,SMA_post_GABA_cr_summary_array] ; 
+SMA_pre_post_GABA_NAA = [SMA_pre_GABA_NAA_summary_array,SMA_post_GABA_NAA_summary_array] ;
 
 %% Output tables - GABA uncorrected values & QC metrics  
 
@@ -770,6 +770,54 @@ GABA_QC.SMA_post_FWHM = SMA_post_GABA_FWHM_summary_array ;
 
 % save QC table 
 
+%% Input estimated GABA/water (uncorrected) values for subjects w.o water twix file
+
+% These values were generated by calculating TARQUIN water estimates using
+% rda2 (off file) and then calculated relative to known GANNET values. 
+% i.e. 1. (GannetPreWater_missing / TarquinPreWater) = GannetPostWater_known /
+% TarquinPostWater); 2. GABAabsoluteConc / estimated_water * K constant
+
+% Insert into uncorrected output tables 
+
+%S3_DJ missing pre water TWIX 
+S3_DJ_HP_GABA_water_pre = 3.8689 ;
+uncorr_output_GABA.HP_pre_GABA_water(1,1) = S3_DJ_HP_GABA_water_pre ; 
+
+S3_DJ_PTL_GABA_water_pre = 3.2630 ;
+uncorr_output_GABA.PTL_pre_GABA_water(1,1) = S3_DJ_PTL_GABA_water_pre ;
+
+S3_DJ_SMA_GABA_water_pre = 2.6750 ;
+uncorr_output_GABA.SMA_pre_GABA_water(1,1) = S3_DJ_SMA_GABA_water_pre ;
+
+%S5_DJ missing pre water TWIX 
+S5_RD_HP_GABA_water_pre = 2.2600 ;
+uncorr_output_GABA.HP_pre_GABA_water(2,1) = S5_RD_HP_GABA_water_pre ;
+
+S5_RD_PTL_GABA_water_pre = 1.7181 ;
+uncorr_output_GABA.PTL_pre_GABA_water(2,1) = S5_RD_PTL_GABA_water_pre ;
+
+S5_RD_SMA_GABA_water_pre = 2.3534 ;
+uncorr_output_GABA.SMA_pre_GABA_water(2,1) = S5_RD_SMA_GABA_water_pre ;
+
+%S31_AR missing all post TWIX
+S31_AR_HP_GABA_water_post = 0.9788 ; 
+uncorr_output_GABA.HP_post_GABA_water(25,1) = S31_AR_HP_GABA_water_post ;
+
+S31_AR_PTL_GABA_water_post = 3.1040 ;
+uncorr_output_GABA.PTL_post_GABA_water(25,1) = S31_AR_PTL_GABA_water_post ;
+
+S31_AR_SMA_GABA_water_post = 9.7554 ;
+uncorr_output_GABA.SMA_post_GABA_water(25,1) = S31_AR_SMA_GABA_water_post ; 
+
+S31_AR_HP_GABA_cr_post = 0.0258 ;
+uncorr_output_GABA.HP_post_GABA_cr(25,1) = S31_AR_HP_GABA_cr_post ; 
+
+S31_AR_PTL_GABA_cr_post =  0.0910 ;
+uncorr_output_GABA.PTL_post_GABA_cr(25,1) = S31_AR_PTL_GABA_cr_post ;
+
+S31_AR_SMA_GABA_cr_post = 0.3677 ;
+uncorr_output_GABA.SMA_post_GABA_cr(25,1) = S31_AR_SMA_GABA_cr_post ;
+
 %% Partial volume corrected GABA (metabolite / (1 - CSF proportion) 
 
 % Partial volume corrected GABA concentration values
@@ -779,7 +827,6 @@ corr_output_GABA.Stim_cond = Data_vox_partial_vol.Stim_cond ;
 corr_output_GABA.Stim_cond_num = Data_vox_partial_vol.Stim_cond_num ;
 corr_output_GABA.PA_group = Data_vox_partial_vol.PA_group ;
 corr_output_GABA.PA_group_number = Data_vox_partial_vol.PA_group_num ;
-
 
 corr_output_GABA.HP_pre_GABA_water = uncorr_output_GABA.HP_pre_GABA_water ./ (1 - Data_vox_partial_vol.HP_pre_CSF_prop) ;
 corr_output_GABA.HP_post_GABA_water = uncorr_output_GABA.HP_post_GABA_water ./ (1 - Data_vox_partial_vol.HP_post_CSF_prop) ; 
@@ -802,5 +849,59 @@ corr_output_GABA.SMA_post_GABA_cr = uncorr_output_GABA.SMA_pre_GABA_cr ./ (1 - D
 corr_output_GABA.SMA_pre_GABA_NAA = uncorr_output_GABA.SMA_pre_GABA_NAA ./ (1 - Data_vox_partial_vol.SMA_pre_CSF_prop) ; 
 corr_output_GABA.SMA_post_GABA_NAA = uncorr_output_GABA.SMA_post_GABA_NAA ./ (1 - Data_vox_partial_vol.SMA_post_CSF_prop) ;
 
-% save GABA corr table
-save 
+%% Plot corrected GABA/water values 
+
+% Generic template - need to split into activity groups, and rTMS
+% conditions 
+
+figure('color','w');
+xaxis_time = [1,2] ; 
+
+% HP pre and post GABA/water
+subplot(1,3,1)
+
+for x = 1:size(ID,1)
+    plot(xaxis_time,HP_pre_post_GABA_water(x,:),'k.-') ;
+    hold on;
+end
+
+xlabel('Time')
+ylabel('HP GABA/H20')
+set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
+
+% PTL pre and post GABA/water
+subplot(1,3,2)
+
+for x = 1:size(ID,1)
+    plot(xaxis_time,PTL_pre_post_GABA_water(x,:),'k.-') ;
+    hold on;
+end
+
+xlabel('Time')
+ylabel('PTL GABA/H20')
+set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
+    
+% SMA pre and post GABA/water 
+subplot(1,3,3)
+
+for x = 1:size(ID,1)
+    plot(xaxis_time,SMA_pre_post_GABA_water(x,:),'k.-') ;
+    hold on;
+end
+
+xlabel('Time')
+ylabel('SMA GABA/H20')
+set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
+    
+    
+%% Save GABA corr table
+save('GABA_MRS_output.mat','uncorr_output_GABA','corr_output_GABA','GABA_QC','Data_vox_partial_vol') ; % save .mat file
+writetable(corr_output_GABA,'GABA_vol_corrected_values_output.txt','Delimiter','\t','WriteRowNames',true) ; % save GABA volume corrected table as .txt file
+writetable(corr_output_GABA,'GABA_vol_corrected_values_output.xlsx','WriteRowNames',true) ; % save GABA volume corrected table as .xlsx file
+writetable(GABA_QC,'GABA_QC.txt','Delimiter','\t','WriteRowNames',true) ; % save GABA QC metric table as .txt file
+writetable(GABA_QC,'GABA_QC.xlsx','WriteRowNames',true); % save GABA QC metric table as .xlsx file
+movefile('GABA_MRS_output.mat',pathIn)
+movefile('GABA_vol_corrected_values_output.txt',pathIn) ;
+movefile('GABA_vol_corrected_values_output.xlsx',pathIn) ;
+movefile('GABA_QC.txt',pathIn) ; 
+movefile('GABA_QC.xlsx',pathIn) ;
