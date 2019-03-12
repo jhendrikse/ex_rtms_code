@@ -1217,7 +1217,7 @@ xlabel('PA group')
 ylabel('Baseline HP GABA/water')
 set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Active','Inactive'},'xtick',1:2) ;
 ebar_HP_PA = errorbar(xaxis_group,[mean_HP_GABA_water_active_outlier_corr,mean_HP_GABA_water_inactive_outlier_corr],errorbar_length_HP_GABA_water_BL_PA_group) ;
-set(ebar_HP_PA,'Marker','s','LineWidth',1,'MarkerSize',15,'Color','k')
+set(ebar_HP_PA,'Marker','s','LineWidth',0.5,'MarkerSize',20,'Color','k')
 
 % Baseline PTL concentration
 
@@ -1235,34 +1235,243 @@ subplot(2,3,1)
 PTL_pre_GABA_water_PTL_idx = corr_output_GABA.PTL_pre_GABA_water(idx_ptl) ; 
 PTL_post_GABA_water_PTL_idx = corr_output_GABA.PTL_post_GABA_water(idx_ptl) ; 
 
-outlier_high_cutoff_PTL_pre_GABA_water = nanmean(PTL_pre_GABA_water_PTL_idx) + (2.5*nanstd(PTL_pre_GABA_water_PTL_idx)) ;
-outlier_low_cutoff_PTL_pre_GABA_water = nanmean(PTL_pre_GABA_water_PTL_idx) - (2.5*nanstd(PTL_pre_GABA_water_PTL_idx)) ;
+outlier_high_cutoff_PTL_pre_GABA_water_PTL_idx = nanmean(PTL_pre_GABA_water_PTL_idx) + (2.5*nanstd(PTL_pre_GABA_water_PTL_idx)) ; % Define outliers as +- 2.5 std outside time point mean 
+outlier_low_cutoff_PTL_pre_GABA_water_PTL_idx = nanmean(PTL_pre_GABA_water_PTL_idx) - (2.5*nanstd(PTL_pre_GABA_water_PTL_idx)) ;
 
-outlier_high_cutoff_PTL_post_GABA_water = nanmean(PTL_post_GABA_water_PTL_idx) + (2.5*nanstd(PTL_post_GABA_water_PTL_idx)) ;
-outlier_low_cutoff_PTL_post_GABA_water = nanmean(PTL_post_GABA_water_PTL_idx) - (2.5*nanstd(PTL_post_GABA_water_PTL_idx)) ;
+outlier_high_cutoff_PTL_post_GABA_water_PTL_idx = nanmean(PTL_post_GABA_water_PTL_idx) + (2.5*nanstd(PTL_post_GABA_water_PTL_idx)) ;
+outlier_low_cutoff_PTL_post_GABA_water_PTL_idx = nanmean(PTL_post_GABA_water_PTL_idx) - (2.5*nanstd(PTL_post_GABA_water_PTL_idx)) ;
 
-PTL_pre_GABA_water_outlier_log = (PTL_pre_GABA_water_PTL_idx < outlier_low_cutoff_PTL_pre_GABA_water) | (PTL_pre_GABA_water_PTL_idx > outlier_high_cutoff_PTL_pre_GABA_water) ; % log index of outlier values
-PTL_post_GABA_water_outlier_log = (PTL_post_GABA_water_PTL_idx < outlier_low_cutoff_PTL_post_GABA_water) | (PTL_post_GABA_water_PTL_idx > outlier_high_cutoff_PTL_post_GABA_water) ;
+PTL_pre_GABA_water_outlier_log_PTL_idx = (PTL_pre_GABA_water_PTL_idx < outlier_low_cutoff_PTL_pre_GABA_water_PTL_idx) | (PTL_pre_GABA_water_PTL_idx > outlier_high_cutoff_PTL_pre_GABA_water_PTL_idx) ; % log index of outlier values
+PTL_post_GABA_water_outlier_log_PTL_idx = (PTL_post_GABA_water_PTL_idx < outlier_low_cutoff_PTL_post_GABA_water_PTL_idx) | (PTL_post_GABA_water_PTL_idx > outlier_high_cutoff_PTL_post_GABA_water_PTL_idx) ;
 
-% PTL_pre_GABA_water_outlier_corr = PTL_pre_GABA_water_PTL_idx(PTL_pre_GABA_water_outlier_log == 0) ; 
-PTL_pre_GABA_water_PTL_idx(PTL_pre_GABA_water_outlier_log == 1) = NaN; 
+PTL_pre_GABA_water_PTL_idx(PTL_pre_GABA_water_outlier_log_PTL_idx == 1) = NaN; % replace outliers with NaNs 
+PTL_post_GABA_water_PTL_idx(PTL_post_GABA_water_outlier_log_PTL_idx == 1) = NaN; 
 
-PTL_post_GABA_water_outlier_corr = PTL_post_GABA_water_PTL_idx(PTL_post_GABA_water_outlier_log == 0) ; 
-PTL_post_GABA_water_outlier_corr(20,1) = nan
+PTL_pre_post_GABA_water_outlier_corr = [PTL_pre_GABA_water_PTL_idx,PTL_post_GABA_water_PTL_idx] ; 
 
-PTL_pre_post_GABA_water_outlier_corr = [PTL_pre_GABA_water_outlier_corr,PTL_post_GABA_water_outlier_corr] ;
+% errorbar variables
+mean_PTL_pre_GABA_water_PTL_idx_outlier_corr = nanmean(PTL_pre_GABA_water_PTL_idx) ; % calculate mean and std
+std_PTL_pre_GABA_water_PTL_idx_outlier_corr = nanstd(PTL_pre_GABA_water_PTL_idx) ;  
+
+mean_PTL_post_GABA_water_PTL_idx_outlier_corr = nanmean(PTL_post_GABA_water_PTL_idx) ; % calculate mean and std 
+std_PTL_post_GABA_water_PTL_idx_outlier_corr = nanstd(PTL_post_GABA_water_PTL_idx) ;
 
 
-for x = 1:size(pre_post_GABA_water_outlier_corr,1)
-    plot(xaxis_time,PTL_GABA_water_PTL_idx(x,:),'.-k') ;
+for x = 1:size(PTL_pre_post_GABA_water_outlier_corr,1)
+    plot(xaxis_time,PTL_pre_post_GABA_water_outlier_corr(x,:),'*-k') ;
     hold on;
 end
 
-title('PTL GABA/H2O following PTL rTMS')
+title('PTL GABA/H2O following PTL rTMS, outliers removed')
 xlabel('Time') ;
 ylabel('PTL GABA/H2O') ;
 set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
 
+ebar_PTL_GABA_water_ptl_idx = errorbar(xaxis_group,[mean_PTL_pre_GABA_water_PTL_idx_outlier_corr,mean_PTL_post_GABA_water_PTL_idx_outlier_corr,],[std_PTL_pre_GABA_water_PTL_idx_outlier_corr,std_PTL_post_GABA_water_PTL_idx_outlier_corr]) ;
+set(ebar_PTL_GABA_water_ptl_idx,'Marker','s','LineWidth',0.5,'MarkerSize',20,'Color','k')
+
+% SMA pre and post GABA/water
+subplot(2,3,2)
+
+SMA_pre_GABA_water_PTL_idx = corr_output_GABA.SMA_pre_GABA_water(idx_ptl) ; 
+SMA_post_GABA_water_PTL_idx = corr_output_GABA.SMA_post_GABA_water(idx_ptl) ; 
+
+outlier_high_cutoff_SMA_pre_GABA_water_PTL_idx = nanmean(SMA_pre_GABA_water_PTL_idx) + (2.5*nanstd(SMA_pre_GABA_water_PTL_idx)) ; % Define outliers as +- 2.5 std outside time point mean 
+outlier_low_cutoff_SMA_pre_GABA_water_PTL_idx = nanmean(SMA_pre_GABA_water_PTL_idx) - (2.5*nanstd(SMA_pre_GABA_water_PTL_idx)) ;
+
+outlier_high_cutoff_SMA_post_GABA_water_PTL_idx = nanmean(SMA_post_GABA_water_PTL_idx) + (2.5*nanstd(SMA_post_GABA_water_PTL_idx)) ;
+outlier_low_cutoff_SMA_post_GABA_water_PTL_idx = nanmean(SMA_post_GABA_water_PTL_idx) - (2.5*nanstd(SMA_post_GABA_water_PTL_idx)) ;
+
+SMA_pre_GABA_water_outlier_log_PTL_idx = (SMA_pre_GABA_water_PTL_idx < outlier_low_cutoff_SMA_pre_GABA_water_PTL_idx) | (SMA_pre_GABA_water_PTL_idx > outlier_high_cutoff_SMA_pre_GABA_water_PTL_idx) ; % log index of outlier values
+SMA_post_GABA_water_outlier_log_PTL_idx = (SMA_post_GABA_water_PTL_idx < outlier_low_cutoff_SMA_post_GABA_water_PTL_idx) | (SMA_post_GABA_water_PTL_idx > outlier_high_cutoff_SMA_post_GABA_water_PTL_idx) ;
+
+SMA_pre_GABA_water_PTL_idx(SMA_pre_GABA_water_outlier_log_PTL_idx == 1) = NaN; % replace outliers with NaNs 
+SMA_post_GABA_water_PTL_idx(SMA_post_GABA_water_outlier_log_PTL_idx == 1) = NaN; 
+
+SMA_pre_post_GABA_water_outlier_corr = [SMA_pre_GABA_water_PTL_idx,SMA_post_GABA_water_PTL_idx] ; 
+
+% errorbar variables
+mean_SMA_pre_GABA_water_PTL_idx_outlier_corr = nanmean(SMA_pre_GABA_water_PTL_idx) ; % calculate mean and std
+std_SMA_pre_GABA_water_PTL_idx_outlier_corr = nanstd(SMA_pre_GABA_water_PTL_idx) ;  
+
+mean_SMA_post_GABA_water_PTL_idx_outlier_corr = nanmean(SMA_post_GABA_water_PTL_idx) ; % calculate mean and std 
+std_SMA_post_GABA_water_PTL_idx_outlier_corr = nanstd(SMA_post_GABA_water_PTL_idx) ;
+
+for x = 1:size(SMA_pre_post_GABA_water_outlier_corr,1)
+    plot(xaxis_time,SMA_pre_post_GABA_water_outlier_corr(x,:),'*-k') ;
+    hold on;
+end
+
+title('SMA GABA/H2O following PTL rTMS, outliers removed')
+xlabel('Time') ;
+ylabel('SMA GABA/H2O') ;
+set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
+
+ebar_SMA_GABA_water_ptl_idx = errorbar(xaxis_group,[mean_SMA_pre_GABA_water_PTL_idx_outlier_corr,mean_SMA_post_GABA_water_PTL_idx_outlier_corr,],[std_SMA_pre_GABA_water_PTL_idx_outlier_corr,std_SMA_post_GABA_water_PTL_idx_outlier_corr]) ;
+set(ebar_SMA_GABA_water_ptl_idx,'Marker','s','LineWidth',0.5,'MarkerSize',20,'Color','k')
+
+% HP pre and post GABA/water
+subplot(2,3,3)
+
+HP_pre_GABA_water_PTL_idx = corr_output_GABA.HP_pre_GABA_water(idx_ptl) ; 
+HP_post_GABA_water_PTL_idx = corr_output_GABA.HP_post_GABA_water(idx_ptl) ; 
+
+outlier_high_cutoff_HP_pre_GABA_water_PTL_idx = nanmean(HP_pre_GABA_water_PTL_idx) + (2.5*nanstd(HP_pre_GABA_water_PTL_idx)) ; % Define outliers as +- 2.5 std outside time point mean 
+outlier_low_cutoff_HP_pre_GABA_water_PTL_idx = nanmean(HP_pre_GABA_water_PTL_idx) - (2.5*nanstd(HP_pre_GABA_water_PTL_idx)) ;
+
+outlier_high_cutoff_HP_post_GABA_water_PTL_idx = nanmean(HP_post_GABA_water_PTL_idx) + (2.5*nanstd(HP_post_GABA_water_PTL_idx)) ;
+outlier_low_cutoff_HP_post_GABA_water_PTL_idx = nanmean(HP_post_GABA_water_PTL_idx) - (2.5*nanstd(HP_post_GABA_water_PTL_idx)) ;
+
+HP_pre_GABA_water_outlier_log_PTL_idx = (HP_pre_GABA_water_PTL_idx < outlier_low_cutoff_HP_pre_GABA_water_PTL_idx) | (HP_pre_GABA_water_PTL_idx > outlier_high_cutoff_HP_pre_GABA_water_PTL_idx) ; % log index of outlier values
+HP_post_GABA_water_outlier_log_PTL_idx = (HP_post_GABA_water_PTL_idx < outlier_low_cutoff_HP_post_GABA_water_PTL_idx) | (HP_post_GABA_water_PTL_idx > outlier_high_cutoff_HP_post_GABA_water_PTL_idx) ;
+
+HP_pre_GABA_water_PTL_idx(HP_pre_GABA_water_outlier_log_PTL_idx == 1) = NaN; % replace outliers with NaNs 
+HP_post_GABA_water_PTL_idx(HP_post_GABA_water_outlier_log_PTL_idx == 1) = NaN; 
+
+HP_pre_post_GABA_water_outlier_corr = [HP_pre_GABA_water_PTL_idx,HP_post_GABA_water_PTL_idx] ; 
+
+% errorbar variables
+mean_HP_pre_GABA_water_PTL_idx_outlier_corr = nanmean(HP_pre_GABA_water_PTL_idx) ; % calculate mean and std
+std_HP_pre_GABA_water_PTL_idx_outlier_corr = nanstd(HP_pre_GABA_water_PTL_idx) ;  
+
+mean_HP_post_GABA_water_PTL_idx_outlier_corr = nanmean(HP_post_GABA_water_PTL_idx) ; % calculate mean and std 
+std_HP_post_GABA_water_PTL_idx_outlier_corr = nanstd(HP_post_GABA_water_PTL_idx) ;
+
+for x = 1:size(HP_pre_post_GABA_water_outlier_corr,1)
+    plot(xaxis_time,HP_pre_post_GABA_water_outlier_corr(x,:),'*-k') ;
+    hold on;
+end
+
+title('HP GABA/H2O following PTL rTMS, outliers removed')
+xlabel('Time') ;
+ylabel('HP GABA/H2O') ;
+set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
+
+ebar_HP_GABA_water_ptl_idx = errorbar(xaxis_group,[mean_HP_pre_GABA_water_PTL_idx_outlier_corr,mean_HP_post_GABA_water_PTL_idx_outlier_corr,],[std_HP_pre_GABA_water_PTL_idx_outlier_corr,std_HP_post_GABA_water_PTL_idx_outlier_corr]) ;
+set(ebar_HP_GABA_water_ptl_idx,'Marker','s','LineWidth',0.5,'MarkerSize',20,'Color','k')
+
+%SMA group - participants who received PTL rTMS
+
+% PTL pre and post GABA/water
+subplot(2,3,4)
+
+PTL_pre_GABA_water_SMA_idx = corr_output_GABA.PTL_pre_GABA_water(idx_sma) ; 
+PTL_post_GABA_water_SMA_idx = corr_output_GABA.PTL_post_GABA_water(idx_sma) ; 
+
+outlier_high_cutoff_PTL_pre_GABA_water_SMA_idx = nanmean(PTL_pre_GABA_water_SMA_idx) + (2.5*nanstd(PTL_pre_GABA_water_SMA_idx)) ; % Define outliers as +- 2.5 std outside time point mean 
+outlier_low_cutoff_PTL_pre_GABA_water_SMA_idx = nanmean(PTL_pre_GABA_water_SMA_idx) - (2.5*nanstd(PTL_pre_GABA_water_SMA_idx)) ;
+
+outlier_high_cutoff_PTL_post_GABA_water_SMA_idx = nanmean(PTL_post_GABA_water_SMA_idx) + (2.5*nanstd(PTL_post_GABA_water_SMA_idx)) ;
+outlier_low_cutoff_PTL_post_GABA_water_SMA_idx = nanmean(PTL_post_GABA_water_SMA_idx) - (2.5*nanstd(PTL_post_GABA_water_SMA_idx)) ;
+
+PTL_pre_GABA_water_outlier_log_SMA_idx = (PTL_pre_GABA_water_SMA_idx < outlier_low_cutoff_SMA_pre_GABA_water) | (PTL_pre_GABA_water_SMA_idx > outlier_high_cutoff_SMA_pre_GABA_water) ; % log index of outlier values
+PTL_post_GABA_water_outlier_log_SMA_idx = (PTL_post_GABA_water_SMA_idx < outlier_low_cutoff_SMA_post_GABA_water) | (PTL_post_GABA_water_SMA_idx > outlier_high_cutoff_SMA_post_GABA_water) ;
+
+PTL_pre_GABA_water_SMA_idx(PTL_pre_GABA_water_outlier_log_SMA_idx == 1) = NaN; % replace outliers with NaNs 
+PTL_post_GABA_water_SMA_idx(PTL_post_GABA_water_outlier_log_SMA_idx == 1) = NaN; 
+
+PTL_pre_post_GABA_water_outlier_corr = [PTL_pre_GABA_water_SMA_idx,PTL_post_GABA_water_SMA_idx] ; 
+
+% errorbar variables
+mean_PTL_pre_GABA_water_SMA_idx_outlier_corr = nanmean(PTL_pre_GABA_water_SMA_idx) ; % calculate mean and std
+std_PTL_pre_GABA_water_SMA_idx_outlier_corr = nanstd(PTL_pre_GABA_water_SMA_idx) ;  
+
+mean_PTL_post_GABA_water_SMA_idx_outlier_corr = nanmean(PTL_post_GABA_water_SMA_idx) ; % calculate mean and std 
+std_PTL_post_GABA_water_SMA_idx_outlier_corr = nanstd(PTL_post_GABA_water_SMA_idx) ;
+
+
+for x = 1:size(PTL_pre_post_GABA_water_outlier_corr,1)
+    plot(xaxis_time,PTL_pre_post_GABA_water_outlier_corr(x,:),'*-k') ;
+    hold on;
+end
+
+title('PTL GABA/H2O following SMA rTMS, outliers removed')
+xlabel('Time') ;
+ylabel('PTL GABA/H2O') ;
+set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
+
+ebar_PTL_GABA_water_sma_idx = errorbar(xaxis_group,[mean_PTL_pre_GABA_water_SMA_idx_outlier_corr,mean_PTL_post_GABA_water_SMA_idx_outlier_corr,],[std_PTL_pre_GABA_water_SMA_idx_outlier_corr,std_PTL_post_GABA_water_SMA_idx_outlier_corr]) ;
+set(ebar_PTL_GABA_water_sma_idx,'Marker','s','LineWidth',0.5,'MarkerSize',20,'Color','k')
+
+% SMA pre and post GABA/water
+subplot(2,3,5)
+
+SMA_pre_GABA_water_SMA_idx = corr_output_GABA.SMA_pre_GABA_water(idx_sma) ; 
+SMA_post_GABA_water_SMA_idx = corr_output_GABA.SMA_post_GABA_water(idx_sma) ; 
+
+outlier_high_cutoff_SMA_pre_GABA_water_SMA_idx = nanmean(SMA_pre_GABA_water_SMA_idx) + (2.5*nanstd(SMA_pre_GABA_water_SMA_idx)) ; % Define outliers as +- 2.5 std outside time point mean 
+outlier_low_cutoff_SMA_pre_GABA_water_SMA_idx = nanmean(SMA_pre_GABA_water_SMA_idx) - (2.5*nanstd(SMA_pre_GABA_water_SMA_idx)) ;
+
+outlier_high_cutoff_SMA_post_GABA_water_SMA_idx = nanmean(SMA_post_GABA_water_SMA_idx) + (2.5*nanstd(SMA_post_GABA_water_SMA_idx)) ;
+outlier_low_cutoff_SMA_post_GABA_water_SMA_idx = nanmean(SMA_post_GABA_water_SMA_idx) - (2.5*nanstd(SMA_post_GABA_water_SMA_idx)) ;
+
+SMA_pre_GABA_water_outlier_log_SMA_idx = (SMA_pre_GABA_water_SMA_idx < outlier_low_cutoff_SMA_pre_GABA_water_SMA_idx) | (SMA_pre_GABA_water_SMA_idx > outlier_high_cutoff_SMA_pre_GABA_water_SMA_idx) ; % log index of outlier values
+SMA_post_GABA_water_outlier_log_SMA_idx = (SMA_post_GABA_water_SMA_idx < outlier_low_cutoff_SMA_post_GABA_water_SMA_idx) | (SMA_post_GABA_water_SMA_idx > outlier_high_cutoff_SMA_post_GABA_water_SMA_idx) ;
+
+SMA_pre_GABA_water_SMA_idx(SMA_pre_GABA_water_outlier_log_SMA_idx == 1) = NaN; % replace outliers with NaNs 
+SMA_post_GABA_water_SMA_idx(SMA_post_GABA_water_outlier_log_SMA_idx == 1) = NaN; 
+
+SMA_pre_post_GABA_water_outlier_corr = [SMA_pre_GABA_water_SMA_idx,SMA_post_GABA_water_SMA_idx] ; 
+
+% errorbar variables
+mean_SMA_pre_GABA_water_SMA_idx_outlier_corr = nanmean(SMA_pre_GABA_water_SMA_idx) ; % calculate mean and std
+std_SMA_pre_GABA_water_SMA_idx_outlier_corr = nanstd(SMA_pre_GABA_water_SMA_idx) ;  
+
+mean_SMA_post_GABA_water_SMA_idx_outlier_corr = nanmean(SMA_post_GABA_water_SMA_idx) ; % calculate mean and std 
+std_SMA_post_GABA_water_SMA_idx_outlier_corr = nanstd(SMA_post_GABA_water_SMA_idx) ;
+
+for x = 1:size(SMA_pre_post_GABA_water_outlier_corr,1)
+    plot(xaxis_time,SMA_pre_post_GABA_water_outlier_corr(x,:),'*-k') ;
+    hold on;
+end
+
+title('SMA GABA/H2O following SMA rTMS, outliers removed')
+xlabel('Time') ;
+ylabel('SMA GABA/H2O') ;
+set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
+
+ebar_SMA_GABA_water_sma_idx = errorbar(xaxis_group,[mean_SMA_pre_GABA_water_SMA_idx_outlier_corr,mean_SMA_post_GABA_water_SMA_idx_outlier_corr,],[std_SMA_pre_GABA_water_SMA_idx_outlier_corr,std_SMA_post_GABA_water_SMA_idx_outlier_corr]) ;
+set(ebar_SMA_GABA_water_sma_idx,'Marker','s','LineWidth',0.5,'MarkerSize',20,'Color','k')
+
+% HP pre and post GABA/water
+subplot(2,3,6)
+
+HP_pre_GABA_water_SMA_idx = corr_output_GABA.HP_pre_GABA_water(idx_sma) ; 
+HP_post_GABA_water_SMA_idx = corr_output_GABA.HP_post_GABA_water(idx_sma) ; 
+
+outlier_high_cutoff_HP_pre_GABA_water_SMA_idx = nanmean(HP_pre_GABA_water_SMA_idx) + (2.5*nanstd(HP_pre_GABA_water_SMA_idx)) ; % Define outliers as +- 2.5 std outside time point mean 
+outlier_low_cutoff_HP_pre_GABA_water_SMA_idx = nanmean(HP_pre_GABA_water_SMA_idx) - (2.5*nanstd(HP_pre_GABA_water_SMA_idx)) ;
+
+outlier_high_cutoff_HP_post_GABA_water_SMA_idx = nanmean(HP_post_GABA_water_SMA_idx) + (2.5*nanstd(HP_post_GABA_water_SMA_idx)) ;
+outlier_low_cutoff_HP_post_GABA_water_SMA_idx = nanmean(HP_post_GABA_water_SMA_idx) - (2.5*nanstd(HP_post_GABA_water_SMA_idx)) ;
+
+HP_pre_GABA_water_outlier_log_SMA_idx = (HP_pre_GABA_water_SMA_idx < outlier_low_cutoff_HP_pre_GABA_water_SMA_idx) | (HP_pre_GABA_water_SMA_idx > outlier_high_cutoff_HP_pre_GABA_water_SMA_idx) ; % log index of outlier values
+HP_post_GABA_water_outlier_log_SMA_idx = (HP_post_GABA_water_SMA_idx < outlier_low_cutoff_HP_post_GABA_water_SMA_idx) | (HP_post_GABA_water_SMA_idx > outlier_high_cutoff_HP_post_GABA_water_SMA_idx) ;
+
+HP_pre_GABA_water_SMA_idx(HP_pre_GABA_water_outlier_log == 1) = NaN; % replace outliers with NaNs 
+HP_post_GABA_water_SMA_idx(HP_post_GABA_water_outlier_log == 1) = NaN; 
+
+HP_pre_post_GABA_water_outlier_corr = [HP_pre_GABA_water_SMA_idx,HP_post_GABA_water_SMA_idx] ; 
+
+% errorbar variables
+mean_HP_pre_GABA_water_SMA_idx_outlier_corr = nanmean(HP_pre_GABA_water_SMA_idx) ; % calculate mean and std
+std_HP_pre_GABA_water_SMA_idx_outlier_corr = nanstd(HP_pre_GABA_water_SMA_idx) ;  
+
+mean_HP_post_GABA_water_SMA_idx_outlier_corr = nanmean(HP_post_GABA_water_SMA_idx) ; % calculate mean and std 
+std_HP_post_GABA_water_SMA_idx_outlier_corr = nanstd(HP_post_GABA_water_SMA_idx) ;
+
+for x = 1:size(HP_pre_post_GABA_water_outlier_corr,1)
+    plot(xaxis_time,HP_pre_post_GABA_water_outlier_corr(x,:),'*-k') ;
+    hold on;
+end
+
+title('HP GABA/H2O following SMA rTMS, outliers removed')
+xlabel('Time') ;
+ylabel('HP GABA/H2O') ;
+set(gca,'XLimMode','manual','XLim',[0.5,2.5],'box','off','tickdir','out','XTickLabel',{'Pre','Post'},'xtick',1:2) ;
+
+ebar_HP_GABA_water_sma_idx = errorbar(xaxis_group,[mean_HP_pre_GABA_water_SMA_idx_outlier_corr,mean_HP_post_GABA_water_SMA_idx_outlier_corr,],[std_HP_pre_GABA_water_SMA_idx_outlier_corr,std_HP_post_GABA_water_SMA_idx_outlier_corr]) ;
+set(ebar_HP_GABA_water_sma_idx,'Marker','s','LineWidth',0.5,'MarkerSize',20,'Color','k')
 
 %% Save outputs
 
