@@ -1,0 +1,101 @@
+datadir_all_sub=/projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep
+echo $datadir_all_sub
+
+##make directory for HP and DCP binarised con maps
+
+#loop over subject ID's
+for k in {sub-DJ03,sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+mkdir $sub_dir/func/hp_group_map_bin
+mkdir $sub_dir/func/ldcp_group_map_bin
+
+done
+
+## copy HP-seed and DCP-seed 1st level con maps (group mni) into newly created folders
+
+#loop over subject ID's
+for k in {sub-DJ03,sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+#cp $sub_dir/func/spm_sphere_3_-24_-18_-18/con_0001.img $sub_dir/func/hp_group_map_bin/#HP_con_map_group_mni.img
+
+cp $sub_dir/func/spm_sphere_3_-24_-18_-18/con_0001.hdr $sub_dir/func/hp_group_map_bin/HP_con_map_group_mni.hdr
+
+#cp $sub_dir/func/spm_sphere_3_-28_1_3/con_0001.img $sub_dir/func/ldcp_group_map_bin/#ldcp_con_map_group_mni.img
+
+cp $sub_dir/func/spm_sphere_3_-28_1_3/con_0001.hdr $sub_dir/func/ldcp_group_map_bin/ldcp_con_map_group_mni.hdr
+
+done
+
+
+###BINARISED CON MAPS - didn't work :( 
+
+module load fsl
+
+#parent directory for all subjects data
+datadir_all_sub=/projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep
+echo $datadir_all_sub
+
+#loop over subject ID's
+for k in {sub-DJ03,sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+#produce binarised seed mask for HP and SMA individual seeds
+fslmaths $sub_dir/func/hp_group_map_bin/HP_con_map_group_mni.hdr -thr 0.02 -bin $sub_dir/func/hp_group_map_bin/HP_con_map_group_mni_bin.hdr
+
+fslmaths $sub_dir/func/ldcp_group_map_bin/ldcp_con_map_group_mni.hdr -thr 0.02 -bin $sub_dir/func/ldcp_group_map_bin/ldcp_con_map_group_mni_bin.hdr
+
+done
+
+
+####LOOP OVER SUBJECTS TO CREATE OVERLAP OF 1ST LEVEL CON MAPS##
+
+datadir_all_sub=/projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep
+echo $datadir_all_sub
+mkdir $datadir_all_sub/1st_level_hp_map_average/
+mkdir $datadir_all_sub/1st_level_dcp_map_average/
+
+#create overlap template for lHP seed map first subject by renaming hp_con_map_group_mni.hdr and moving to group directory
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/func/hp_group_map_bin/HP_con_map_group_mni.hdr $datadir_all_sub/1st_level_hp_map_average/hp_all_map_mni.hdr
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/func/hp_group_map_bin/HP_con_map_group_mni.img $datadir_all_sub/1st_level_hp_map_average/hp_all_map_mni.img
+
+#create overlap template for ldcp seed map on first subject by renaming ldcp_con_map_group_mni.hdr and moving to group directory
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/func/ldcp_group_map_bin/ldcp_con_map_group_mni.hdr $datadir_all_sub/1st_level_dcp_map_average/dcp_all_map_mni.hdr
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/func/ldcp_group_map_bin/ldcp_con_map_group_mni.img $datadir_all_sub/1st_level_dcp_map_average/dcp_all_map_mni.img
+
+
+#loop over subject ID's (other than sub-DJ03 already in template)
+for k in {sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+# loop over subjects to add each subject's HP seed map to hp_all_map_mni.img template
+#fslmaths $datadir_all_sub/1st_level_hp_map_average/hp_all_map_mni.hdr -add $sub_dir/func/hp_group_map_bin/HP_con_map_group_mni.hdr #$datadir_all_sub/1st_level_hp_map_average/hp_all_map_mni.hdr
+
+
+
+# trying fmean - need to alter 
+# loop over subjects to add each subject's HP seed map to hp_all_map_mni.img template
+fslmaths $datadir_all_sub/1st_level_hp_map_average/hp_all_map_mni.hdr -fmean $sub_dir/func/hp_group_map_bin/HP_con_map_group_mni.hdr $datadir_all_sub/1st_level_hp_map_average/hp_all_map_mni_fmean.hdr
+
+
+
+#need to do average for this as well 
+# loop over subjects to add each subject's DCP stim site to all_dcp_3mm_ind_mni template
+#fslmaths $datadir_all_sub/sub_cortical_seed_overlap/ldcp/all_dcp_3mm_ind_mni.nii.gz -add $sub_dir/rois/ldcp/sphere_3_ind_dcp_bin.nii.gz #$datadir_all_sub/sub_cortical_seed_overlap/ldcp/all_dcp_3mm_ind_mni.nii.gz
+
+done
+
+

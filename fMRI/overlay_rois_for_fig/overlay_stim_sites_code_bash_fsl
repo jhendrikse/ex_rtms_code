@@ -1,0 +1,89 @@
+
+
+module load fsl
+
+#parent directory for all subjects data
+datadir_all_sub=/projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep
+echo $datadir_all_sub
+
+###BINARISED STIMULATION SEED MASKS
+
+#loop over subject ID's
+for k in {sub-DJ03,sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+#produce binarised seed mask for HP and SMA individual seeds
+fslmaths $sub_dir/rois/stimulation_site/parietal/sphere_3_*.nii -thr 0.5 -bin $sub_dir/rois/stimulation_site/parietal/sphere_3_ind_parietal_bin
+fslmaths $sub_dir/rois/stimulation_site/sma/sphere_3_*.nii -thr 0.5 -bin $sub_dir/rois/stimulation_site/sma/sphere_3_ind_sma_bin
+
+done
+
+
+####LOOP OVER SUBJECTS TO CREATE OVERLAP OF STIM SITES##
+
+#create overlap template for parietal stim site on first subject by renaming sphere_3_ind_parietal_bin and moving to group directory
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/rois/stimulation_site/parietal/sphere_3_ind_parietal_bin.nii.gz $datadir_all_sub/stim_site_overlap/parietal/all_parietal_3mm_ind_mni.nii.gz
+
+#create overlap template for sma stim site on first subject by renaming sphere_3_ind_sma_bin and moving to group directory
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/rois/stimulation_site/sma/sphere_3_ind_sma_bin.nii.gz $datadir_all_sub/stim_site_overlap/sma/all_sma_3mm_ind_mni.nii.gz
+
+#loop over subject ID's (other than sub-DJ03 already in template)
+for k in {sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+# loop over subjects to add each subject's parietal stim site to all_parietal_3mm_ind_mni template
+fslmaths $datadir_all_sub/stim_site_overlap/parietal/all_parietal_3mm_ind_mni.nii.gz -add $sub_dir/rois/stimulation_site/parietal/sphere_3_ind_parietal_bin.nii.gz $datadir_all_sub/stim_site_overlap/parietal/all_parietal_3mm_ind_mni.nii.gz
+
+# loop over subjects to add each subject's sma stim site to all_sma_3mm_ind_mni template
+fslmaths $datadir_all_sub/stim_site_overlap/sma/all_sma_3mm_ind_mni.nii.gz -add $sub_dir/rois/stimulation_site/sma/sphere_3_ind_sma_bin.nii.gz $datadir_all_sub/stim_site_overlap/sma/all_sma_3mm_ind_mni.nii.gz
+
+done
+
+####LOOP OVER SUBJECTS TO CREATE OVERLAP OF STIM SITES SEPARATELY FOR EACH STIM COND##
+
+
+module load fsl
+
+#parent directory for all subjects data
+datadir_all_sub=/projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep
+echo $datadir_all_sub
+
+#create overlap template for parietal stim site on first subject by renaming sphere_3_ind_parietal_bin and moving to group directory
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/rois/stimulation_site/parietal/sphere_3_ind_parietal_bin.nii.gz $datadir_all_sub/stim_site_overlap/parietal/all_parietal_stim_sub_3mm_ind_mni.nii.gz
+
+#loop over subject ID's (other than sub-DJ03 already in template)
+for k in {sub-006,sub-010,sub-011,sub-015,sub-017,sub-018,sub-019,sub-020,sub-022,sub-023,sub-030,sub-AR31,sub-ST34,sub-TG35,sub-CR38,sub-JC41,sub-SA42,sub-PL43}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+# loop over subjects to add each subject's parietal stim site to all_parietal_3mm_ind_mni template
+fslmaths $datadir_all_sub/stim_site_overlap/parietal/all_parietal_stim_sub_3mm_ind_mni.nii.gz -add $sub_dir/rois/stimulation_site/parietal/sphere_3_ind_parietal_bin.nii.gz $datadir_all_sub/stim_site_overlap/parietal/all_parietal_stim_sub_3mm_ind_mni.nii.gz
+
+done
+
+
+
+#create overlap template for sma stim site on first subject by renaming sphere_3_ind_sma_bin and moving to group directory
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-007/rois/stimulation_site/sma/sphere_3_ind_sma_bin.nii.gz $datadir_all_sub/stim_site_overlap/sma/all_sma_stim_sub_3mm_ind_mni.nii.gz
+
+#loop over subject ID's (other than sub-007 already in template)
+for k in {sub-007,sub-008,sub-009,sub-012,sub-021,sub-024,sub-026,sub-027,sub-028,sub-029,sub-031,sub-PKA30,sub-CD32,sub-DJG33,sub-AY36,sub-JT37,sub-EH39,sub-NU40,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+# loop over subjects to add each subject's sma stim site to all_sma_3mm_ind_mni template
+fslmaths $datadir_all_sub/stim_site_overlap/sma/all_sma_stim_sub_3mm_ind_mni.nii.gz -add $sub_dir/rois/stimulation_site/sma/sphere_3_ind_sma_bin.nii.gz $datadir_all_sub/stim_site_overlap/sma/all_sma_stim_sub_3mm_ind_mni.nii.gz
+
+done
+
+

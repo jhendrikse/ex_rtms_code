@@ -1,0 +1,83 @@
+
+datadir_all_sub=/projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep
+echo $datadir_all_sub
+
+##make directory for HP and DCP seeds
+
+#loop over subject ID's
+for k in {sub-DJ03,sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+mkdir $sub_dir/rois/HP_ind
+mkdir $sub_dir/rois/ldcp
+
+done
+
+## copy HP and DCP seeds into newly created folders
+
+#loop over subject ID's
+for k in {sub-DJ03,sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+cp $sub_dir/rois/sphere_3_-*_*_-*.nii $sub_dir/rois/HP_ind/
+cp $sub_dir/rois/sphere_3_-*_*_3.nii $sub_dir/rois/ldcp/
+done
+
+
+###BINARISED STIMULATION SEED MASKS
+
+module load fsl
+
+#parent directory for all subjects data
+datadir_all_sub=/projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep
+echo $datadir_all_sub
+
+#loop over subject ID's
+for k in {sub-DJ03,sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+#produce binarised seed mask for HP and SMA individual seeds
+fslmaths $sub_dir/rois/HP_ind/sphere_3_*.nii -thr 0.5 -bin $sub_dir/rois/HP_ind/sphere_3_ind_HP_bin
+fslmaths $sub_dir/rois/ldcp/sphere_3_*.nii -thr 0.5 -bin $sub_dir/rois/ldcp/sphere_3_ind_dcp_bin
+
+done
+
+
+####LOOP OVER SUBJECTS TO CREATE OVERLAP OF STIM SITES##
+
+datadir_all_sub=/projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep
+echo $datadir_all_sub
+mkdir $datadir_all_sub/sub_cortical_seed_overlap/
+mkdir $datadir_all_sub/sub_cortical_seed_overlap/HP_ind
+mkdir $datadir_all_sub/sub_cortical_seed_overlap/ldcp
+
+#create overlap template for lHP seed on first subject by renaming sphere_3_ind_HP_bin and moving to group directory
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/rois/HP_ind/sphere_3_ind_HP_bin.nii.gz $datadir_all_sub/sub_cortical_seed_overlap/HP_ind/all_HP_3mm_ind_mni.nii.gz
+
+#create overlap template for dcp seed site on first subject by renaming sphere_3_ind_dcp_bin and moving to group directory
+cp /projects/kg98/Josh/BIDS_data/MR01/derivatives/fmriprep/sub-DJ03/rois/ldcp/sphere_3_ind_dcp_bin.nii.gz $datadir_all_sub/sub_cortical_seed_overlap/ldcp/all_dcp_3mm_ind_mni.nii.gz
+
+#loop over subject ID's (other than sub-DJ03 already in template)
+for k in {sub-006,sub-007,sub-008,sub-009,sub-010,sub-011,sub-012,sub-015,sub-017,sub-018,sub-019,sub-020,sub-021,sub-022,sub-023,sub-024,sub-026,sub-027,sub-028,sub-029,sub-030,sub-031,sub-PKA30,sub-AR31,sub-CD32,sub-DJG33,sub-ST34,sub-TG35,sub-AY36,sub-JT37,sub-CR38,sub-EH39,sub-NU40,sub-JC41,sub-SA42,sub-PL43,sub-ID44}
+do 
+echo $k
+sub_ID=${k}
+sub_dir=$datadir_all_sub/$sub_ID
+
+# loop over subjects to add each subject's HP seed to all_HP_3mm_ind_mni template
+fslmaths $datadir_all_sub/sub_cortical_seed_overlap/HP_ind/all_HP_3mm_ind_mni.nii.gz -add $sub_dir/rois/HP_ind/sphere_3_ind_HP_bin.nii.gz $datadir_all_sub/sub_cortical_seed_overlap/HP_ind/all_HP_3mm_ind_mni.nii.gz
+
+# loop over subjects to add each subject's DCP stim site to all_dcp_3mm_ind_mni template
+fslmaths $datadir_all_sub/sub_cortical_seed_overlap/ldcp/all_dcp_3mm_ind_mni.nii.gz -add $sub_dir/rois/ldcp/sphere_3_ind_dcp_bin.nii.gz $datadir_all_sub/sub_cortical_seed_overlap/ldcp/all_dcp_3mm_ind_mni.nii.gz
+
+done
+
