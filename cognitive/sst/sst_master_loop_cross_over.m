@@ -6,9 +6,6 @@ clear; close all; clc;
 
 ID = {'S2_MS';'S3_DJ';'S4_JM';'S5_RD';'S6_KV';'S7_PK';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S13_MD';'S15_AZ';'S16_YS';'S17_JTR';'S18_KF';'S19_JA';'S20_WO';'S21_KC';'S22_NS';'S24_AU';'S25_SC';'S26_KW';'S27_ANW';'S28_XK';'S29_HZ';'S30_PKA';'S31_AR';'S32_CD';'S33_DJG';'S34_ST';'S35_TG';'S36_AY';'S37_JT';'S38_CR';'S39_EH';'S40_NU';'S41_JC';'S42_SA';'S43_PL';'S44_ID'};
 
-% Dummy variable to encode PA group (1 = active, 2 = sedentary)
-activity_group = [1;1;1;1;1;2;1;1;1;1;2;2;1;1;2;1;1;2;1;2;1;2;1;2;2;2;2;2;1;1;1;1;2;2;2;2;2;2;2;2] ; 
-
 timePoint = {'pre';'post';'follow_up'};
 
 pathIn = '/Volumes/Lacie/Ex_rTMS_study/Data';
@@ -29,21 +26,3 @@ for x = 1:length(ID)
    
 end
 
-% Separate timepoints and conditions for entry into table
-
-% learning score llpc
-ssrt_integration_pre_llpc = ssrt_integration(:,1,1) ;
-ssrt_integration_post_llpc = ssrt_integration(:,2,1) ;
-ssrt_integration_follow_up_llpc = ssrt_integration(:,3,1) ;
-
-% learning score sma
-ssrt_integration_pre_sma = ssrt_integration(:,1,2) ;
-ssrt_integration_post_sma = ssrt_integration(:,2,2) ;
-ssrt_integration_follow_up_sma = ssrt_integration(:,3,2) ;
-
-Dataset_sst_all_subjects = table(ID,activity_group,ssrt_integration_pre_llpc,ssrt_integration_post_llpc,ssrt_integration_follow_up_llpc,ssrt_integration_pre_sma,ssrt_integration_post_sma,ssrt_integration_follow_up_sma) ; 
-
-save('sst_output_cross_over.mat','Dataset_sst_all_subjects') 
-writetable(Dataset_sst_all_subjects,'Dataset_sst_all_subjects.xlsx','WriteRowNames',true) ;
-movefile sst_output_cross_over.mat /Volumes/LaCie/Ex_rTMS_study/Data/Analysis/Datasets/ ;
-movefile Dataset_sst_all_subjects.xlsx /Volumes/LaCie/Ex_rTMS_study/Data/Analysis/Datasets/ ;
