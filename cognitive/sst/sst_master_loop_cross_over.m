@@ -6,8 +6,9 @@ clear; close all; clc;
 
 ID = {'S2_MS';'S3_DJ';'S4_JM';'S5_RD';'S6_KV';'S7_PK';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S13_MD';'S15_AZ';'S16_YS';'S17_JTR';'S18_KF';'S19_JA';'S20_WO';'S21_KC';'S22_NS';'S24_AU';'S25_SC';'S26_KW';'S27_ANW';'S28_XK';'S29_HZ';'S30_PKA';'S31_AR';'S32_CD';'S33_DJG';'S34_ST';'S35_TG';'S36_AY';'S37_JT';'S38_CR';'S39_EH';'S40_NU';'S41_JC';'S42_SA';'S43_PL';'S44_ID'};
 
-% Dummy variable to encode PA group (1 = active, 2 = sedentary)
-activity_group = [1;1;1;1;1;2;1;1;1;1;2;2;1;1;2;1;1;2;1;2;1;2;1;2;2;2;2;2;1;1;1;1;2;2;2;2;2;2;2;2] ; 
+active = char({'S2_MS';'S3_DJ';'S4_JM';'S5_RD';'S6_KV';'S8_AW';'S9_SF';'S10_JT';'S11_RB';'S16_YS';'S17_JTR';'S19_JA';'S20_WO';'S22_NS';'S25_SC';'S27_ANW';'S33_DJG';'S34_ST';'S35_TG';'S36_AY'}) ;
+
+sedentary = char({'S7_PK';'S13_MD';'S15_AZ';'S21_KC';'S24_AU';'S26_KW';'S28_XK';'S29_HZ';'S30_PKA';'S31_AR';'S32_CD';'S37_JT';'S38_CR';'S39_EH';'S40_NU';'S41_JC';'S42_SA';'S43_PL';'S44_ID'}) ;
 
 timePoint = {'pre';'post';'follow_up'};
 
@@ -40,6 +41,9 @@ ssrt_integration_follow_up_llpc = ssrt_integration(:,3,1) ;
 ssrt_integration_pre_sma = ssrt_integration(:,1,2) ;
 ssrt_integration_post_sma = ssrt_integration(:,2,2) ;
 ssrt_integration_follow_up_sma = ssrt_integration(:,3,2) ;
+
+% Dummy variable to encode PA group (1 = active, 2 = sedentary)
+activity_group = [1;1;1;1;1;2;1;1;1;1;2;2;1;1;2;1;1;2;1;2;1;2;1;2;2;2;2;2;1;1;1;1;2;2;2;2;2;2;2;2] ; 
 
 Dataset_sst_all_subjects = table(ID,activity_group,ssrt_integration_pre_llpc,ssrt_integration_post_llpc,ssrt_integration_follow_up_llpc,ssrt_integration_pre_sma,ssrt_integration_post_sma,ssrt_integration_follow_up_sma) ; 
 
