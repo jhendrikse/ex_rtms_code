@@ -26,15 +26,20 @@ for x = 1:length(ID)
             
             filename_sst = [char(pathIn),'/all_subjects/',char(ID(x,1)),'/Cognitive/',char(Condition(y,1)),'/sst/',char(timePoint(z,1)),'/',char(ID(x,1)),'_',char(timePoint(z,1)),'.dat'];
             
-            %[~,~,~,~,~,ssrt_integration(x,z,y),ssrt_mean(x,z,y)] = sst_master(filename_sst); %% stores only ssrt_integration, ssrt_mean values (40 X 3 X 2 matrix). 
+            %[~,~,~,~,~,ssrt_integration(x,z,y),ssrt_mean(x,z,y)] =
+            %sst_master(filename_sst); %% stores only ssrt_integration,
+            %ssrt_mean values (40 X 3 X 2 matrix). %uncomment if ssrt is
+            %only desired output
             
-            [mean_ex_gauss(x,z,y),sigma_ex_gauss(x,z,y),tau_ex_gauss(x,z,y),~,chiSquare(x,z,y),ssrt_integration(x,z,y),ssrt_mean(x,z,y)] = sst_master(filename_sst); %% stores Exgauss parameters & ssrt_integration, ssrt_mean as 40 X 3 X 2 matrix.
+            [mean_ex_gauss(x,z,y),sigma_ex_gauss(x,z,y),tau_ex_gauss(x,z,y),~,chiSquare(x,z,y),rt_go_omission_count(x,z,y),rt_go_commission_count(x,z,y),mean_rt_go(x,z,y),sd_rt_go(x,z,y),mean_rt_go_omission_replace(x,z,y),mean_ssd(x,z,y),ssd_range(x,z,y),mean_incorr_stop_trial_rt(x,z,y),race_model_assumption_met(x,z,y),p_respond_given_stop(x,y,z),ssrt_integration(x,z,y),ssrt_mean(x,z,y)] = sst_master(filename_sst); %% stores Exgauss parameters & ssrt_integration, ssrt_mean as 40 X 3 X 2 matrix.
         end
     end
 end
 
 
-% Separate timepoints and conditions for entry into table
+%% Separate timepoints and conditions for entry into table %%%%%
+
+%%%%% Ex Gauss %%%%%%%
 
 % mean ex gauss llpc
 mean_ex_gauss_pre_llpc = mean_ex_gauss(:,1,1) ;
@@ -76,6 +81,13 @@ chiSquare_pre_sma = chiSquare(:,1,2) ;
 chiSquare_post_sma = chiSquare(:,2,2) ; 
 chiSquare_follow_up_sma = chiSquare(:,3,2) ;
 
+%%%%%%% RT parameters %%%%%%
+
+
+
+
+%%%%%% SSRT %%%%%%%%%%%
+
 % ssrt_integration llpc
 ssrt_integration_pre_llpc = ssrt_integration(:,1,1) ;
 ssrt_integration_post_llpc = ssrt_integration(:,2,1) ;
@@ -96,11 +108,16 @@ ssrt_mean_pre_sma = ssrt_mean(:,1,2) ;
 ssrt_mean_post_sma = ssrt_mean(:,2,2) ;
 ssrt_mean_follow_up_sma = ssrt_mean(:,3,2) ;
 
+%% Output datasets
+
 % Dummy variable to encode PA group (1 = active, 2 = sedentary)
 activity_group = [1;1;1;1;1;2;1;1;1;1;2;2;1;1;2;1;1;2;1;2;1;2;1;2;2;2;2;2;1;1;1;1;2;2;2;2;2;2;2;2] ; 
 
+
+% SSRT dataset w/ RT parameters
 Dataset_ssrt_all_subjects = table(ID,activity_group,ssrt_integration_pre_llpc,ssrt_integration_post_llpc,ssrt_integration_follow_up_llpc,ssrt_integration_pre_sma,ssrt_integration_post_sma,ssrt_integration_follow_up_sma,ssrt_mean_pre_llpc,ssrt_mean_post_llpc,ssrt_mean_follow_up_llpc,ssrt_mean_pre_sma,ssrt_mean_post_sma,ssrt_mean_follow_up_sma) ; 
 
+% Ex gauss dataset
 Dataset_ex_gauss_sst_all_subjects = table(ID,activity_group,mean_ex_gauss_pre_llpc,mean_ex_gauss_post_llpc,mean_ex_gauss_follow_up_llpc,mean_ex_gauss_pre_sma,mean_ex_gauss_post_sma,mean_ex_gauss_follow_up_sma,...
     sigma_ex_gauss_pre_llpc,sigma_ex_gauss_post_llpc,sigma_ex_gauss_follow_up_llpc,sigma_ex_gauss_pre_sma,sigma_ex_gauss_post_sma,sigma_ex_gauss_follow_up_sma,tau_ex_gauss_pre_llpc,tau_ex_gauss_post_llpc,tau_ex_gauss_follow_up_llpc,...
     tau_ex_gauss_pre_sma,tau_ex_gauss_post_sma,tau_ex_gauss_follow_up_sma,chiSquare_pre_llpc,chiSquare_post_llpc,chiSquare_follow_up_llpc,chiSquare_pre_sma,chiSquare_post_sma,chiSquare_follow_up_sma) ;
