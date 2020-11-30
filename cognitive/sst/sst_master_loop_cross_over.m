@@ -83,8 +83,105 @@ chiSquare_follow_up_sma = chiSquare(:,3,2) ;
 
 %%%%%%% RT parameters %%%%%%
 
+% rt go omission count llpc
+rt_go_omission_count_pre_llpc = rt_go_omission_count(:,1,1) ;
+rt_go_omission_count_post_llpc = rt_go_omission_count(:,2,1) ;
+rt_go_omission_count_follow_up_llpc = rt_go_omission_count(:,3,1) ;
 
+% rt go omission count sma
+rt_go_omission_count_pre_sma = rt_go_omission_count(:,1,2) ;
+rt_go_omission_count_post_sma = rt_go_omission_count(:,2,2) ;
+rt_go_omission_count_follow_up_sma = rt_go_omission_count(:,3,2) ;
 
+% rt go commission count llpc
+rt_go_commission_count_pre_llpc = rt_go_commission_count(:,1,1) ;
+rt_go_commission_count_post_llpc = rt_go_commission_count(:,2,1) ;
+rt_go_commission_count_follow_up_llpc = rt_go_commission_count(:,3,1) ;
+
+% rt go comission count sma
+rt_go_commission_count_pre_sma = rt_go_commission_count(:,1,2) ;
+rt_go_commission_count_post_sma = rt_go_commission_count(:,2,2) ;
+rt_go_commission_count_follow_up_sma = rt_go_commission_count(:,3,2) ;
+
+% mean rt go llpc
+mean_rt_go_pre_llpc = mean_rt_go(:,1,1) ;
+mean_rt_go_post_llpc = mean_rt_go(:,2,1) ;
+mean_rt_go_follow_up_llpc = mean_rt_go(:,3,1) ;
+
+% mean rt go sma
+mean_rt_go_pre_sma = mean_rt_go(:,1,2) ;
+mean_rt_go_post_sma = mean_rt_go(:,2,2) ;
+mean_rt_go_follow_up_sma = mean_rt_go(:,3,2) ;
+
+% sd rt go llpc
+sd_rt_go_pre_llpc = sd_rt_go(:,1,1) ;
+sd_rt_go_post_llpc = sd_rt_go(:,2,1) ;
+sd_rt_go_follow_up_llpc = sd_rt_go(:,3,1) ;
+
+% sd rt go sma
+sd_rt_go_pre_sma = sd_rt_go(:,1,2) ;
+sd_rt_go_post_sma = sd_rt_go(:,2,2) ;
+sd_rt_go_follow_up_sma = sd_rt_go(:,3,2) ;
+
+% mean rt go omission replace llpc
+mean_rt_go_omission_replace_pre_llpc = mean_rt_go_omission_replace(:,1,1) ;
+mean_rt_go_omission_replace_post_llpc = mean_rt_go_omission_replace(:,2,1) ;
+mean_rt_go_omission_replace_follow_up_llpc = mean_rt_go_omission_replace(:,3,1) ;
+
+% mean rt go omission replace sma
+mean_rt_go_omission_replace_pre_sma = mean_rt_go_omission_replace(:,1,2) ;
+mean_rt_go_omission_replace_post_sma = mean_rt_go_omission_replace(:,2,2) ;
+mean_rt_go_omission_replace_follow_up_sma = mean_rt_go_omission_replace(:,3,2) ;
+
+% mean ssd llpc
+mean_ssd_pre_llpc = mean_ssd(:,1,1) ; 
+mean_ssd_post_llpc = mean_ssd(:,2,1) ;
+mean_ssd_follow_up_llpc = mean_ssd(:,3,1) ;
+
+% mean ssd sma
+mean_ssd_pre_sma = mean_ssd(:,1,2) ; 
+mean_ssd_post_sma = mean_ssd(:,2,2) ;
+mean_ssd_follow_up_sma = mean_ssd(:,3,2) ;
+
+% ssd range llpc
+ssd_range_pre_llpc = ssd_range(:,1,1) ;
+ssd_range_post_llpc = ssd_range(:,2,1) ;
+ssd_range_follow_up_llpc = ssd_range(:,3,1) ;
+
+% ssd range sma
+ssd_range_pre_sma = ssd_range(:,1,2) ;
+ssd_range_post_sma = ssd_range(:,2,2) ;
+ssd_range_follow_up_sma = ssd_range(:,3,2) ;
+
+% mean incorrect stop trial rt llpc
+mean_incorr_stop_trial_rt_pre_llpc = mean_incorr_stop_trial_rt(:,1,1) ;
+mean_incorr_stop_trial_rt_post_llpc = mean_incorr_stop_trial_rt(:,2,1) ;
+mean_incorr_stop_trial_rt_follow_up_llpc = mean_incorr_stop_trial_rt(:,3,1) ;
+
+% mean incorrect stop trial rt sma
+mean_incorr_stop_trial_rt_pre_sma = mean_incorr_stop_trial_rt(:,1,2) ;
+mean_incorr_stop_trial_rt_post_sma = mean_incorr_stop_trial_rt(:,2,2) ;
+mean_incorr_stop_trial_rt_follow_up_sma = mean_incorr_stop_trial_rt(:,3,2) ;
+
+% race model assumption met llpc
+race_model_assumption_met_pre_llpc = race_model_assumption_met(:,1,1) ;
+race_model_assumption_met_post_llpc = race_model_assumption_met(:,2,1) ;
+race_model_assumption_met_follow_up_llpc = race_model_assumption_met(:,3,1) ;
+
+% race model assumption met sma
+race_model_assumption_met_pre_sma = race_model_assumption_met(:,1,2) ;
+race_model_assumption_met_post_sma = race_model_assumption_met(:,2,2) ;
+race_model_assumption_met_follow_up_sma = race_model_assumption_met(:,3,2) ;
+
+% probability of respond on stop trial (% stop fail) llpc
+p_respond_given_stop_pre_llpc = p_respond_given_stop(:,1,1) ; 
+p_respond_given_stop_post_llpc = p_respond_given_stop(:,2,1) ;
+p_respond_given_stop_follow_up_llpc = p_respond_given_stop(:,3,1) ;
+
+% probability of respond on stop trial (% stop fail) sma
+p_respond_given_stop_pre_sma = p_respond_given_stop(:,1,2) ; 
+p_respond_given_stop_post_sma = p_respond_given_stop(:,2,2) ;
+p_respond_given_stop_follow_up_sma = p_respond_given_stop(:,3,2) ;
 
 %%%%%% SSRT %%%%%%%%%%%
 
